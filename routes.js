@@ -5,14 +5,25 @@ const requestHandler = (req, res) => {
   const method = req.method;
 
   if (url === '/') {
-    res.write('<html>');
-    res.write('<head><title>Enter Your Message</title></head>');
-    res.write(`<body>`);
-    res.write(`<h1>Greeting from Nodejs</h1>`)
-    res.write(`<ul><li>User1</li><li>User2</li></ul>`)
-    res.write(`<form action='/create-user' method='POST'><input type='text' name='username'/><button type='submit'>Submit</button></form>`);
-    res.write(`</body>`);
-    res.write('</html>');
+    res.write(`
+      <html>
+        <head>
+          <title>Enter Your Username</title>
+        </head>
+        <body>
+          <h1>Greeting from Nodejs</h1>
+          <ul>
+            <li>User1</li>
+            <li>User2</li>
+            <li>User3</li>
+          </ul>
+          <form action='/create-user' method='POST'>
+            <input type='text' name='username'/>
+            <button type='submit'>Submit</button>
+          </form>
+        </body>
+      </html>
+    `)
     return res.end();
   }
   
