@@ -27,7 +27,7 @@ const requestHandler = (req, res) => {
         return res.end();
       });
     });
-  } 
+  }
   
   res.setHeader('Content-Type', 'text/html');
   res.write('<html>');
