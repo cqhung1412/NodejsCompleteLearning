@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Nati-onBear/NodejsCompleteLearning/issues"
   },
-  "homepage": "https://github.com/Nati-onBear/NodejsCompleteLearning#readme"
+  "homepage": "https://github.com/Nati-onBear/NodejsCompleteLearning#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
