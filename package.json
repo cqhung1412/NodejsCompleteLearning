@@ -1,0 +1,20 @@
+{
+  "name": "nodejscompletelearning",
+  "version": "1.0.0",
+  "description": "Completed Nodejs Learning",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nati-onBear/NodejsCompleteLearning.git"
+  },
+  "author": "Barry Bear",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nati-onBear/NodejsCompleteLearning/issues"
+  },
+  "homepage": "https://github.com/Nati-onBear/NodejsCompleteLearning#readme"
+}
