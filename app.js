@@ -2,15 +2,20 @@ const express = require('express');
 
 const app = express()
 
-app.use((req, res, next) => {
-  console.log('Inside middleware 1');
-  next(); // Allows the req come to below middleware
+app.use('/',(req, res, next) => {
+  console.log('This always runs!!!');
+  next();
 });
 
-app.use((req, res, next) => {
+app.use('/product',(req, res, next) => {
+  console.log('Inside middleware 1');
+  res.send('<h1>Welcome to "Product" page!</h1>');
+  // next(); // Cannot set headers after they are sent to the client
+});
+
+app.use('/',(req, res, next) => {
   console.log('Inside middleware 2');
   res.send('<h1>Love from Express</h1>');
-  next();
 });
 
 app.listen(6900);
