@@ -23,6 +23,7 @@ app.use((req, res, next) => {
       </body>
     </html>
   `);
+  next();
 });
 
 const server = http.createServer(app);
