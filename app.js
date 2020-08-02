@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // app.use([adminRoutes, shopRoutes]);
 app.use('/admin', adminRoutes);
+app.use(shopRoutes);
 
 // Catch all
 app.use((req, res, next) => {
