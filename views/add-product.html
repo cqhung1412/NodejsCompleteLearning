@@ -1,111 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add New Product</title>
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-      font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    }
-
-    main {
-      padding: 1rem;
-    }
-
-    .main-header {
-      width: 100%;
-      height: 3.5rem;
-      padding: 0 1.5rem;
-      background-color: seagreen;
-    }
-    
-    .main-header__nav {
-      height: 100%;
-      display: flex;
-      align-items: center;
-    }
-
-    .main-header__item-list {
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      display: flex;
-    }
-
-    .main-header__item {
-      padding: 0 1rem;
-      margin: 0;
-    }
-
-    .main-header__item a {
-      text-decoration: none;
-      color: black;
-    }
-
-    .main-header__item a:hover,
-    .main-header__item a:active,
-    .main-header__item a.active {
-      color: springgreen;
-    }
-
-    .product-form {
-      width: 20rem;
-      max-width: 90%; /*for mobile*/
-      margin: auto;
-    }
-    .form-control {
-      margin: 1rem 0;
-    }
-    
-    .form-control label,
-    .form-control input {
-      width: 100%;
-      display: block;
-    }
-
-    .form-control input {
-      font: inherit;
-      border: 1px solid seagreen;
-      border-radius: 2px;
-    }
-
-    button {
-      width: 100%;
-      font: inherit;
-      border: 1px solid seagreen;
-      border-radius: 3px;
-      color: seagreen;
-      background: whitesmoke;
-      cursor: pointer;
-    }
-
-    button:hover,
-    button:active {
-      background-color: seagreen;
-      color: whitesmoke;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Product</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/product.css">
 </head>
+
 <body>
-  <header class="main-header">
-    <nav class="main-header__nav">
-      <ul class="main-header__item-list">
-        <li class="main-header__item"><a href="/">Shop</a></li>
-        <li class="main-header__item"><a class="active" href="/admin/add-product">Add Product</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <form class="product-form" action="/admin/add-product" method="POST">
-      <div class="form-control">
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title"/>
-      </div>
-      <button type="submit">Add New Product</button>
-    </form>
-  </main>
+    <header class="main-header">
+        <nav class="main-header__nav">
+            <ul class="main-header__item-list">
+                <li class="main-header__item"><a href="/">Shop</a></li>
+                <li class="main-header__item"><a class="active" href="/admin/add-product">Add Product</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form class="product-form" action="/admin/add-product" method="POST">
+            <div class="form-control">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" />
+            </div>
+            <button type="submit">Add New Product</button>
+        </form>
+    </main>
 </body>
+
 </html>

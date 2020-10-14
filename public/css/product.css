@@ -1,0 +1,38 @@
+.product-form {
+    width: 20rem;
+    max-width: 90%;
+    /*for mobile*/
+    margin: auto;
+}
+
+.form-control {
+    margin: 1rem 0;
+}
+
+.form-control label,
+.form-control input {
+    width: 100%;
+    display: block;
+}
+
+.form-control input {
+    font: inherit;
+    border: 1px solid seagreen;
+    border-radius: 2px;
+}
+
+button {
+    width: 100%;
+    font: inherit;
+    border: 1px solid seagreen;
+    border-radius: 3px;
+    color: seagreen;
+    background: whitesmoke;
+    cursor: pointer;
+}
+
+button:hover,
+button:active {
+    background-color: seagreen;
+    color: whitesmoke;
+}
