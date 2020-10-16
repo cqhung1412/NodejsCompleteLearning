@@ -10,19 +10,23 @@ const products = [];
 
 // /admin/add-product => GET
 Router.get('/add-product',(req, res) => {
-  // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-  res.render('add-product', { docTitle: 'Admin - Add Product', path: '/admin/add-product' });
+  res.render('add-product', { 
+    pageTitle: 'Admin - Add Product', 
+    path: '/admin/add-product',
+    formsCSS: true,
+    productCSS: true,
+    activeAddProduct: true
+  });
 });
 
 // /admin/add-product => POST
 Router.post('/add-product',(req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   products.push({ 
     title: req.body.title 
   });
   res.redirect('/');
 });
 
-// module.exports = Router;
 exports.routes = Router;
 exports.products = products;
