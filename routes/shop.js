@@ -11,7 +11,8 @@ const Router = express.Router();
 Router.get('/',(req, res) => {
   // console.log(adminData.products); // shared across all users -> we don't want this behavior
   // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-  res.render('shop');
+  const products = adminData.products;
+  res.render('shop', { prods: products, docTitle: 'My Nodejs Shop' });
 });
 
 module.exports = Router;
