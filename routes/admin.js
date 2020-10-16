@@ -11,7 +11,7 @@ const products = [];
 // /admin/add-product => GET
 Router.get('/add-product',(req, res) => {
   // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-  res.render('add-product', { docTitle: 'Admin - Add Product' });
+  res.render('add-product', { docTitle: 'Admin - Add Product', path: '/admin/add-product' });
 });
 
 // /admin/add-product => POST
