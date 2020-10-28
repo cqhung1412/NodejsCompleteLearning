@@ -18,6 +18,7 @@ const getProductsFromFile = callback => {
 
 module.exports = class Product {
   constructor(title, imgUrl, price, desc) {
+    this.id = null;
     this.title = title;
     this.imgUrl = imgUrl;
     this.price = price;
@@ -26,6 +27,7 @@ module.exports = class Product {
 
   save() {
     getProductsFromFile(products => {
+      this.id = products.length;
       products.push(this);
       fs.writeFile(
         productDataPath,

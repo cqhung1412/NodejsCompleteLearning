@@ -9,13 +9,17 @@ main {
 }
 
 button {
-    width: 100%;
     font: inherit;
     border: 1px solid seagreen;
     border-radius: 3px;
     color: seagreen;
-    background: whitesmoke;
+    background: white;
     cursor: pointer;
+}
+
+button a {
+    text-decoration: none;
+    color: inherit;
 }
 
 button:hover,
