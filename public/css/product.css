@@ -14,7 +14,7 @@
 
 .card__header,
 .card__content {
-    flex: 1; /*equal height*/
+    flex: 1;
     padding: 1rem;
 }
 
@@ -47,6 +47,7 @@
 .product-item {
     width: 20rem;
     max-width: 95%;
+    margin: 1rem;
 }
 
 .product__title {
