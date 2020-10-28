@@ -13,20 +13,7 @@ const getProductsFromFile = callback => {
     else {
       callback(JSON.parse(fileContent));
     }
-  })
-}
-
-const getProductById = callback => {
-  fs.readFile(productDataPath, (error, fileContent) => {
-    if (error) {
-      console.log(error);
-      return {};
-    }
-    else {
-      const result = JSON.parse(fileContent).find(product => product.id === callback);
-      return result;
-    }
-  })
+  });
 }
 
 module.exports = class Product {
