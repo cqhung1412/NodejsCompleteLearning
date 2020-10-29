@@ -1,15 +1,30 @@
 const Product = require('../../models/products');
 
-exports.getAddProduct = (req, res) => {
-    res.render('admin/add-product', {
-        pageTitle: 'Admin - Add Product',
-        path: '/admin/add-product'
-    });
+exports.getEditProduct = (req, res) => {
+    const { productId } = req.params;
+    const { isEditing } = req.query;
+
+    if (isEditing) {
+        Product.fetchById(productId, foundProduct => {
+            res.render('admin/edit-product', {
+                pageTitle: 'Admin - Edit Product',
+                path: '/admin/edit-product' + productId,
+                product: foundProduct
+            });
+        });        
+    }
+    else {
+        res.render('admin/edit-product', {
+            pageTitle: 'Admin - Add Product',
+            path: '/admin/add-product',
+            product: {}
+        });
+    }
 };
 
 exports.postAddProduct = (req, res) => {
     const { title, imgUrl, price, desc } = req.body;
-    const product = new Product(title, imgUrl,price, desc);
+    const product = new Product(title, imgUrl, price, desc);
     product.save();
     res.redirect('/');
 };
