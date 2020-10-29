@@ -17,20 +17,45 @@ const getCartFromFile = callback => {
     });
 }
 
-module.exports = class Cart {
+class Cart {
+    constructor() {
+        this.products = [];
+        this.totalPrice = 0.0;
+    }
+
+    static fetchAll(cb) {
+        getCartFromFile(cart => {
+            const { products, totalPrice } = cart;
+            if (products.length !== 0) {
+                Product.fetchAll(allProducts => {
+                    const productsInCart = [];
+                    products.forEach(cartProd => {
+                        const productById = allProducts.find(prod => prod.id === cartProd.id);
+                        productsInCart.push(productById); // not functional programming
+                    });
+                    cb(productsInCart, totalPrice);
+                });
+            }
+            else {
+                cb([], 0.0);
+            }
+        });
+    }
+}
+
+class CartItem {
     constructor(id, price) {
         this.id = id;
         this.price = price;
     }
 
-    save() {
+    addToCart() {
         getCartFromFile(cart => {
             const { products, totalPrice } = cart;
             if (!products.find(product => product.id === this.id)) {
-                products.push(this);
                 const newPrice = Number(totalPrice) + Number(this.price);
                 const updatedCart = {
-                    products: products,
+                    products: [...products, this],
                     totalPrice: newPrice.toFixed(2)
                 }
                 fs.writeFile(
@@ -44,23 +69,9 @@ module.exports = class Cart {
             }
         });
     }
+}
 
-    static fetchAll(cb) {
-        getCartFromFile(cart => {
-            const { products, totalPrice } = cart;
-            if (products.length !== 0) {
-                Product.fetchAll(allProducts => {
-                    const productsInCart = [];
-                    products.forEach(cartProd => {
-                        const productById = allProducts.find(prod => prod.id === cartProd.id);
-                        productsInCart.push(productById);
-                    });
-                    cb(productsInCart, totalPrice);
-                });
-            }
-            else {
-                cb([], 0.0);
-            }
-        });
-    }
+module.exports = {
+    Cart: Cart,
+    CartItem: CartItem
 }

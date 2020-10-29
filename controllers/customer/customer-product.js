@@ -33,7 +33,7 @@ exports.getProductDetail = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-    Cart.fetchAll((products, totalPrice) => {
+    Cart.Cart.fetchAll((products, totalPrice) => {
         res.render('customer/cart', {
             prods: products,
             totalPrice: totalPrice,
@@ -46,8 +46,8 @@ exports.getCart = (req, res) => {
 
 exports.postCart = (req, res) => {
     const { productId, productPrice } = req.body; 
-    const product = new Cart(productId, productPrice);
-    product.save();
+    const cartItem = new Cart.CartItem(productId, productPrice);
+    cartItem.addToCart();
     res.redirect('/products');
 }
 

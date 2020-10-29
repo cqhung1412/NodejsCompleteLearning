@@ -1,5 +1,5 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/product.css">
+<link rel="stylesheet" href="/css/product.css">
 </head>
 
 <body>
@@ -7,50 +7,45 @@
 
     <main>
         <% if (prods.length > 0) { %>
-            <div class="grid">
-                <% for (let product of prods) { %>
-                    <article class="card product-item">
-                        <header class="card__header">
-                            <h1 class="product__title"><%= product.title %></h1>
-                        </header>
-                        <div class="card__image">
-                            <img 
-                                src="<%= product.imgUrl %>"
-                                alt="<%= product.title %>"
-                            >
-                        </div>
-                        <div class="card__content">
-                            <h2 class="product__price"><%= product.price %></h2>
-                            <p class="product__description"><%= product.desc %></p>
-                        </div>
-                        <div class="card__actions">
-                            <a href="/products/<%= product.id %> " class="btn">Details</a>
-                            <%- include('../includes/add-to-cart.ejs', {product: product}) %>
-                        </div>
-                    </article>
-                <% } %>
-            </div>
-        <% } else { %>
-            <h1>No available product currently</h1> 
-            <h3>This is a sample product</h3> 
+        <div class="grid">
+            <% for (let product of prods) { %>
             <article class="card product-item">
                 <header class="card__header">
-                    <h1 class="product__title">Agile Practice Guide</h1>
+                    <h1 class="product__title"><%= product.title %></h1>
                 </header>
                 <div class="card__image">
-                    <img 
-                        src="/images/agile-practice-guide.jpg" 
-                        alt="Agile Practice Guide Book"
-                    >
+                    <img src="<%= product.imgUrl %>" alt="<%= product.title %>">
                 </div>
                 <div class="card__content">
-                    <h2 class="product__price">$26.60</h2>
-                    <p class="product__description">The Agile Practice Guide provides tools, situational guidelines and an understanding of the various agile approaches available to enable better results.</p> 
+                    <h2 class="product__price"><%= product.price %></h2>
+                    <p class="product__description"><%= product.desc %></p>
                 </div>
                 <div class="card__actions">
-                    <button class="btn">Add to Cart</button>
+                    <a href="/products/<%= product.id %> " class="btn">Details</a>
+                    <%- include('../includes/add-to-cart.ejs', {product: product}) %>
                 </div>
             </article>
+            <% } %>
+        </div>
+        <% } else { %>
+        <h1>No available product currently</h1>
+        <h3>This is a sample product</h3>
+        <article class="card product-item">
+            <header class="card__header">
+                <h1 class="product__title">Agile Practice Guide</h1>
+            </header>
+            <div class="card__image">
+                <img src="/images/agile-practice-guide.jpg" alt="Agile Practice Guide Book">
+            </div>
+            <div class="card__content">
+                <h2 class="product__price">$26.60</h2>
+                <p class="product__description">The Agile Practice Guide provides tools, situational guidelines and an
+                    understanding of the various agile approaches available to enable better results.</p>
+            </div>
+            <div class="card__actions">
+                <button class="btn">Add to Cart</button>
+            </div>
+        </article>
         <% } %>
     </main>
-<%- include('../includes/end.ejs') %>
+    <%- include('../includes/end.ejs') %>
