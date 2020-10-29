@@ -17,6 +17,14 @@ const getCartFromFile = callback => {
     });
 }
 
+const callWriteFile = (updatedCart) => {
+    fs.writeFile(
+        cartDataPath,
+        JSON.stringify(updatedCart),
+        error => { error && console.log(error); }
+    );
+}
+
 class Cart {
     constructor() {
         this.products = [];
@@ -26,19 +34,23 @@ class Cart {
     static fetchAll(cb) {
         getCartFromFile(cart => {
             const { products, totalPrice } = cart;
-            if (products.length !== 0) {
-                Product.fetchAll(allProducts => {
-                    const productsInCart = [];
-                    products.forEach(cartProd => {
-                        const productById = allProducts.find(prod => prod.id === cartProd.id);
-                        productsInCart.push(productById); // not functional programming
-                    });
-                    cb(productsInCart, totalPrice);
-                });
+            if (products.length > 0) {
+                cb(products, totalPrice);
             }
             else {
                 cb([], 0.0);
             }
+        });
+    }
+
+    static deleteProduct(id) {
+        getCartFromFile(cart => {
+            const { products, totalPrice } = cart;
+            const product = products.find(prod => prod.id === id);
+            const updatedCartProducts = products.filter(prod => prod.id !== id);
+            const updatedTotalPrice = Number(totalPrice) - Number(product.price);
+            const updatedCart = { products: updatedCartProducts, totalPrice: updatedTotalPrice.toFixed(2) };
+            callWriteFile(updatedCart);
         });
     }
 }
@@ -57,12 +69,8 @@ class CartItem {
                 const updatedCart = {
                     products: [...products, this],
                     totalPrice: newPrice.toFixed(2)
-                }
-                fs.writeFile(
-                    cartDataPath,
-                    JSON.stringify(updatedCart),
-                    error => { error && console.log(error); }
-                );
+                };
+                callWriteFile(updatedCart);
             }
             else {
                 console.log("Product is already in cart");
@@ -72,6 +80,6 @@ class CartItem {
 }
 
 module.exports = {
-    Cart: Cart,
+    CartInstance: Cart,
     CartItem: CartItem
 }

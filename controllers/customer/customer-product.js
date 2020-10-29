@@ -1,5 +1,8 @@
 const Product = require('../../models/products');
 const Cart = require('../../models/cart');
+const { get404 } = require('../errors');
+
+const { CartInstance, CartItem } = Cart;
 
 exports.getIndex = (req, res) => {
     Product.fetchAll(products => {
@@ -33,22 +36,35 @@ exports.getProductDetail = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-    Cart.Cart.fetchAll((products, totalPrice) => {
-        res.render('customer/cart', {
-            prods: products,
-            totalPrice: totalPrice,
-            pageTitle: 'My Cart',
-            path: '/cart',
-        })
-    })
-    
+    CartInstance.fetchAll((products, totalPrice) => {
+        Product.fetchAll(allProducts => {
+            const cartProducts = [];
+            products.forEach(cartProd => {
+                const productById = allProducts.find(prod => prod.id === cartProd.id);
+                cartProducts.push(productById); // not functional programming
+            });
+            res.render('customer/cart', {
+                prods: cartProducts,
+                totalPrice: totalPrice,
+                pageTitle: 'My Cart',
+                path: '/cart',
+            });
+        });
+        
+    });
 };
 
 exports.postCart = (req, res) => {
     const { productId, productPrice } = req.body; 
-    const cartItem = new Cart.CartItem(productId, productPrice);
+    const cartItem = new CartItem(productId, productPrice);
     cartItem.addToCart();
     res.redirect('/products');
+};
+
+exports.postRemoveFromCart = (req, res) => {
+    const { productId } = req.body; 
+    CartInstance.deleteProduct(productId);
+    res.redirect('/cart');
 }
 
 exports.getCheckout = (req, res) => {
