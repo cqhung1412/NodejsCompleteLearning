@@ -25,13 +25,13 @@ module.exports = class Product {
     this.desc = desc;
   }
 
-  save() {
+  addProduct() {
     getProductsFromFile(products => {
       this.id = Math.round(Date.now() + Math.random()) + '';
-      products.push(this);
+      const updatedProducts = [...products, this];
       fs.writeFile(
         productDataPath,
-        JSON.stringify(products),
+        JSON.stringify(updatedProducts),
         error => { error && console.log(error); }
       );
     });
