@@ -16,25 +16,40 @@ const getProductsFromFile = callback => {
   });
 }
 
+const callWriteFile = updatedProducts => {
+  fs.writeFile(
+    productDataPath,
+    JSON.stringify(updatedProducts),
+    error => { error && console.log(error); }
+  );
+}
+
 module.exports = class Product {
-  constructor(title, imgUrl, price, desc) {
-    this.id = null;
+  constructor(id, title, imgUrl, price, desc) {
+    this.id = id;
     this.title = title;
     this.imgUrl = imgUrl;
     this.price = price;
     this.desc = desc;
   }
 
-  addProduct() {
+  save() {
     getProductsFromFile(products => {
-      this.id = Math.round(Date.now() + Math.random()) + '';
-      const updatedProducts = [...products, this];
-      fs.writeFile(
-        productDataPath,
-        JSON.stringify(updatedProducts),
-        error => { error && console.log(error); }
-      );
-    });
+      if (this.id) {
+        const updatedProducts = products.map(prod => 
+          prod.id === this.id ? this : prod
+        );
+        callWriteFile(updatedProducts);
+      }
+      else {
+        const newProduct = {
+          ...this, 
+          id: Math.round(Date.now() + Math.random()) + ''
+        };
+        const updatedProducts = [...products, newProduct];
+        callWriteFile(updatedProducts);
+      }
+    })
   }
 
   static fetchById(id, callback) {
