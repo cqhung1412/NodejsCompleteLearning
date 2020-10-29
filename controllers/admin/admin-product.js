@@ -33,7 +33,7 @@ exports.postEditProduct = (req, res) => {
     const updatedProduct = new Product(productId, title, imgUrl, price, desc);
     updatedProduct.save();
     res.redirect('/admin/products');
-}
+};
 
 exports.postAddProduct = (req, res) => {
     const { title, imgUrl, price, desc } = req.body;
@@ -51,3 +51,16 @@ exports.getProducts = (req, res) => {
         });
     });
 };
+
+exports.postDeleteProduct = (req, res) => {
+    const { productId } = req.body;
+    console.log(productId);
+    Product.deleteById(productId, products => {
+        if (products.length > 0) {
+            res.redirect('/admin/products');
+        }
+        else {
+            get404(req, res);
+        }
+    })
+}
