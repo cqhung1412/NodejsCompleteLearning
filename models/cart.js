@@ -2,7 +2,7 @@ const fs = require('fs'); // file system
 const path = require('path');
 
 const rootDir = require('../util/path');
-const Product = require('./products');
+const Product = require('./product');
 const cartDataPath = path.join(rootDir, 'data', 'cart.json');
 
 const getCartFromFile = callback => {

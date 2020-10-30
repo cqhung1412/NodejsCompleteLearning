@@ -1,4 +1,4 @@
-const Product = require('../../models/products');
+const Product = require('../../models/product');
 const { get404 } = require('../errors');
 
 exports.getEditProduct = (req, res) => {

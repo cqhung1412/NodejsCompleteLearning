@@ -1,4 +1,4 @@
-const Product = require('../../models/products');
+const Product = require('../../models/product');
 const Cart = require('../../models/cart');
 const { get404 } = require('../errors');
 
