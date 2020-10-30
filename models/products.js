@@ -12,7 +12,11 @@ module.exports = class Product {
   }
 
   save() {
-
+    const { title, price, imgUrl } = this;
+    return db.execute(
+      'INSERT INTO products(title,price,imgUrl, `desc`) VALUES (?, ?, ?, ?)',
+      [title, price, imgUrl, this.desc] // desc is descending in order by
+    );
   }
 
   static deleteById(id) {
