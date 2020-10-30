@@ -30,13 +30,15 @@ exports.getProducts = (req, res) => {
 
 exports.getProductDetail = (req, res) => {
     const prodId = req.params.productId;
-    Product.fetchById(prodId, foundProduct => {
-        res.render('customer/product-detail', {
-            product: foundProduct,
-            pageTitle: foundProduct.title,
-            path: '/products' + prodId
-        });
-    });
+    Product.fetchById(prodId)
+        .then(([product]) => {
+            res.render('customer/product-detail', {
+                product: product[0],
+                pageTitle: product[0].title,
+                path: '/products' + prodId
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 exports.getCart = (req, res) => {
