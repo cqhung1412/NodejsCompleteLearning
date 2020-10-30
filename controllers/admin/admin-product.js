@@ -36,23 +36,29 @@ exports.postEditProduct = (req, res) => {
 };
 
 exports.postAddProduct = (req, res) => {
-    const { title, imgUrl, price, desc } = req.body;
-    const product = new Product(null, title, imgUrl, price, desc);
-    product.save()
-        .then(() => {
-            res.redirect('/products');
+    const { title, imgUrl, price, description } = req.body;
+    Product.create({
+        title,
+        price,
+        imgUrl,
+        description
+    })
+        .then(result => {
+            res.redirect('/admin/add-product');
         })
         .catch(err => console.log(err));
 };
 
 exports.getProducts = (req, res) => {
-    Product.fetchAll(products => {
-        res.render('admin/products', {
-            prods: products,
-            pageTitle: 'Admin Products',
-            path: '/admin/products'
-        });
-    });
+    Product.findAll()
+        .then(products => {
+            res.render('admin/products', {
+                prods: products,
+                pageTitle: 'Admin Products',
+                path: '/admin/products'
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res) => {

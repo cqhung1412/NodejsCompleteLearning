@@ -28,6 +28,14 @@ form {
     min-width: 100%;
 }
 
+.image {
+    max-height: 20rem;
+}
+
+.image img {
+    height: 100%;
+}
+
 .btn {
     display: inline-block;
     padding: 0.25rem 1rem;

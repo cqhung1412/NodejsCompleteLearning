@@ -5,36 +5,36 @@ const { get404 } = require('../errors');
 const { CartInstance, CartItem } = Cart;
 
 exports.getIndex = (req, res) => {
-    Product.fetchAll()
-        .then(([rows, fieldData]) => {
+    Product.findAll()
+        .then(products => {
             res.render('customer/index', {
-                prods: rows,
+                prods: products,
                 pageTitle: 'My Nodejs Shop',
                 path: '/'
-            })
+            });
         })
-        .catch(err => console.log(err));;
+        .catch(err => console.log(err));
 };
 
 exports.getProducts = (req, res) => {
-    Product.fetchAll()
-        .then(([rows, fieldData]) => {
+    Product.findAll()
+        .then(products => {
             res.render('customer/products', {
-                prods: rows,
+                prods: products,
                 pageTitle: 'All Products',
                 path: '/products'
-            })
+            });
         })
         .catch(err => console.log(err));
 };
 
 exports.getProductDetail = (req, res) => {
     const prodId = req.params.productId;
-    Product.fetchById(prodId)
-        .then(([product]) => {
+    Product.findByPk(prodId)
+        .then((product) => {
             res.render('customer/product-detail', {
-                product: product[0],
-                pageTitle: product[0].title,
+                product: product,
+                pageTitle: product.title,
                 path: '/products' + prodId
             });
         })
