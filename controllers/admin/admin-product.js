@@ -5,19 +5,16 @@ exports.getEditProduct = (req, res) => {
     const { productId } = req.params;
     const { isEditing } = req.query;
     if (isEditing) {
-        Product.fetchById(productId, foundProduct => {
-            if (foundProduct) {
+        Product.findByPk(productId)
+            .then(product => {
                 res.render('admin/edit-product', {
                     pageTitle: 'Admin - Edit Product',
                     path: '/admin/edit-product' + productId,
-                    product: foundProduct,
+                    product: product,
                     editing: isEditing
                 });
-            }
-            else {
-                get404(req, res);
-            }
-        });
+            })
+            .catch(err => console.log(err));
     }
     else {
         res.render('admin/edit-product', {
@@ -29,10 +26,17 @@ exports.getEditProduct = (req, res) => {
 };
 
 exports.postEditProduct = (req, res) => {
-    const { productId, title, imgUrl, price, desc } = req.body;
-    const updatedProduct = new Product(productId, title, imgUrl, price, desc);
-    updatedProduct.save();
-    res.redirect('/admin/products');
+    const { productId, title, imgUrl, price, description } = req.body;
+    Product.findByPk(productId)
+        .then(product => {
+            product.title = title;
+            product.price = price;
+            product.imgUrl = imgUrl;
+            product.description = description;
+            return product.save();
+        })
+        .then(result => res.redirect('/admin/products'))
+        .catch(err => console.log(err));
 };
 
 exports.postAddProduct = (req, res) => {
@@ -63,13 +67,8 @@ exports.getProducts = (req, res) => {
 
 exports.postDeleteProduct = (req, res) => {
     const { productId } = req.body;
-    console.log(productId);
-    Product.deleteById(productId, products => {
-        if (products.length > 0) {
-            res.redirect('/admin/products');
-        }
-        else {
-            get404(req, res);
-        }
-    })
+    Product.findByPk(productId)
+        .then(product => product.destroy())
+        .then(result => res.redirect('/admin/products'))
+        .catch(err => console.log(err));
 }
