@@ -10,17 +10,11 @@
         <h3>Total Price: <%= totalPrice %>$</h3>
         <div class="grid">
             <% for (let product of prods) { %>
-            <article class="card product-item">
-                <header class="card__header">
-                    <h1 class="product__title"><%= product.title %></h1>
+            <article class="card product-item" style="width: 70%; display: flex; flex-direction: row; justify-content: space-between;">
+                <header class="card__content" style="flex: none;">
+                    <p class="product__description"><%= product.title %> (<%= product.qty %>)</p>
+                    <p class="product__price">Unit Price: <%= product.price %>$</p>
                 </header>
-                <div class="card__image">
-                    <img src="<%= product.imgUrl %>" alt="<%= product.title %>">
-                </div>
-                <div class="card__content">
-                    <h2 class="product__price"><%= product.price %></h2>
-                    <h3 class="product__price"><%= product.qty %></h3>
-                </div>
                 <div class="card__actions">
                     <a href="/products/<%= product.id %>" class="btn">Details</a>
                     <form action="/remove-from-cart" method="POST">

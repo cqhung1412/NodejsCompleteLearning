@@ -43,7 +43,7 @@ class Cart {
         });
     }
 
-    static deleteProduct(id) {
+    static removeProduct(id) {
         getCartFromFile(cart => {
             const { products, totalPrice } = cart;
             const product = products.find(prod => prod.id === id);
@@ -78,7 +78,8 @@ class CartItem {
                 const updatedExistingProduct = { ...existingProduct, qty: Number(existingProduct.qty) + 1 };
                 const updatedCart = {
                     products: products.map(prod =>
-                        prod.id === updatedExistingProduct.id ? updatedExistingProduct : prod
+                        prod.id === updatedExistingProduct.id 
+                        ? updatedExistingProduct : prod
                     ),
                     totalPrice: newPrice.toFixed(2)
                 };
