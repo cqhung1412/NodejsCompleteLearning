@@ -36,15 +36,15 @@ exports.getProductDetail = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-    CartInstance.fetchAll((products, totalPrice) => {
+    CartInstance.fetchAll((cartProducts, totalPrice) => {
         Product.fetchAll(allProducts => {
-            const cartProducts = [];
-            products.forEach(cartProd => {
+            const fullCartProducts = [];
+            cartProducts.forEach(cartProd => {
                 const productById = allProducts.find(prod => prod.id === cartProd.id);
-                cartProducts.push(productById); // not functional programming
+                fullCartProducts.push({ ...productById, qty: cartProd.qty }); // not functional programming
             });
             res.render('customer/cart', {
-                prods: cartProducts,
+                prods: fullCartProducts,
                 totalPrice: totalPrice,
                 pageTitle: 'My Cart',
                 path: '/cart',

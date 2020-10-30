@@ -64,16 +64,25 @@ class CartItem {
     addToCart() {
         getCartFromFile(cart => {
             const { products, totalPrice } = cart;
-            if (!products.find(product => product.id === this.id)) {
-                const newPrice = Number(totalPrice) + Number(this.price);
+            const newPrice = Number(totalPrice) + Number(this.price);
+            const existingProduct = products.find(product => product.id === this.id);
+            if (!existingProduct) {
+                const newCartProduct = { ...this, qty: 1 };
                 const updatedCart = {
-                    products: [...products, this],
+                    products: [...products, newCartProduct],
                     totalPrice: newPrice.toFixed(2)
                 };
                 callWriteFile(updatedCart);
             }
             else {
-                console.log("Product is already in cart");
+                const updatedExistingProduct = { ...existingProduct, qty: Number(existingProduct.qty) + 1 };
+                const updatedCart = {
+                    products: products.map(prod =>
+                        prod.id === updatedExistingProduct.id ? updatedExistingProduct : prod
+                    ),
+                    totalPrice: newPrice.toFixed(2)
+                };
+                callWriteFile(updatedCart);
             }
         });
     }
