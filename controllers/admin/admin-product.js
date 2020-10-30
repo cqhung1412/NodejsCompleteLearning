@@ -41,7 +41,7 @@ exports.postEditProduct = (req, res) => {
 
 exports.postAddProduct = (req, res) => {
     const { title, imgUrl, price, description } = req.body;
-    Product.create({
+    req.user.createProduct({
         title,
         price,
         imgUrl,

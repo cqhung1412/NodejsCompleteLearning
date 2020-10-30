@@ -20,6 +20,15 @@ const customerRoutes = require('./routes/customer');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+    User.findByPk('cqhung@node.com')
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(errr));
+});
+
 app.use('/admin', adminRoutes);
 app.use(customerRoutes);
 
@@ -32,10 +41,21 @@ Product.belongsTo(User, {
 });
 User.hasMany(Product);
 
-sequelize.sync({ force: true })
-    .then(result => {
-        // console.log(result);
-        app.listen(6900);
+sequelize.sync()
+    .then(result => User.findByPk('cqhung@node.com'))
+    .then(user => {
+        if (!user) {
+            return User.create({
+                email:'cqhung@node.com',
+                password: Math.round(Date.now() + Math.random()) + '',
+                role: 'ADMIN',
+                name: 'Bear Barry'
+            })
+        }
+        else {
+            return user;
+        }
     })
+    .then(admin => app.listen(6900))
     .catch(err => console.log(err));
 
