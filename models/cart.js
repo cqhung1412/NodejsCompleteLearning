@@ -43,13 +43,14 @@ class Cart {
         });
     }
 
-    static removeProduct(id) {
+    static removeSingleProduct(id) {
         getCartFromFile(cart => {
             const { products, totalPrice } = cart;
             const product = products.find(prod => prod.id === id);
-            const updatedCartProducts = products.filter(prod => prod.id !== id);
+            const updatedCartProducts = products.map(prod => prod.id === id ? { ...prod, qty: Number(prod.qty) - 1 } : prod);
+            const filteredCartProducts = updatedCartProducts.filter(prod => prod.qty > 0);
             const updatedTotalPrice = Number(totalPrice) - Number(product.price);
-            const updatedCart = { products: updatedCartProducts, totalPrice: updatedTotalPrice.toFixed(2) };
+            const updatedCart = { products: filteredCartProducts, totalPrice: updatedTotalPrice.toFixed(2) };
             callWriteFile(updatedCart);
         });
     }

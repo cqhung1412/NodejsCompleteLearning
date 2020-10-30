@@ -18,7 +18,7 @@
                 <div class="card__actions">
                     <a href="/products/<%= product.id %>" class="btn">Details</a>
                     <form action="/remove-from-cart" method="POST">
-                        <button class="btn">Remove from Cart</button>
+                        <button class="btn">Remove One from Cart</button>
                         <input type="hidden" value="<%= product.id %>" name="productId">
                     </form>
                 </div>

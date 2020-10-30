@@ -63,7 +63,7 @@ exports.postCart = (req, res) => {
 
 exports.postRemoveFromCart = (req, res) => {
     const { productId } = req.body; 
-    CartInstance.removeProduct(productId);
+    CartInstance.removeSingleProduct(productId);
     res.redirect('/cart');
 }
 
