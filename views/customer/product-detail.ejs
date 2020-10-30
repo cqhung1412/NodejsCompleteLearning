@@ -12,7 +12,7 @@
             <img src="<%= product.imgUrl %>" alt="<%= product.title %>" style="max-height: 200px; max-width: 200px;">
         </div>
         <h2><%= product.price %></h2>
-        <p><%= product.desc %></p>
+        <p><%= product.description %></p>
         <%- include('../includes/add-to-cart.ejs', {product: product}) %>
     </main>
     <%- include('../includes/end.ejs') %>
