@@ -10,18 +10,8 @@ const app = express();
 
 const errorController = require('./controllers/errors');
 
-const dbPool = require('./util/database');
-
 app.set('view engine', 'ejs');
 app.set('views', 'views'); // default
-
-dbPool.execute('SELECT * FROM products')
-  .then(res => {
-    console.log(res[0], res[1]);
-  })
-  .catch(err => {
-    console.log(err);
-  });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));

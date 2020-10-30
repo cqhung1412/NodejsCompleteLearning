@@ -5,23 +5,27 @@ const { get404 } = require('../errors');
 const { CartInstance, CartItem } = Cart;
 
 exports.getIndex = (req, res) => {
-    Product.fetchAll(products => {
-        res.render('customer/index', {
-            prods: products,
-            pageTitle: 'My Nodejs Shop',
-            path: '/'
-        });
-    });
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('customer/index', {
+                prods: rows,
+                pageTitle: 'My Nodejs Shop',
+                path: '/'
+            })
+        })
+        .catch(err => console.log(err));;
 };
 
 exports.getProducts = (req, res) => {
-    Product.fetchAll(products => {
-        res.render('customer/products', {
-            prods: products,
-            pageTitle: 'All Products',
-            path: '/products'
-        });
-    });
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('customer/products', {
+                prods: rows,
+                pageTitle: 'All Products',
+                path: '/products'
+            })
+        })
+        .catch(err => console.log(err));
 };
 
 exports.getProductDetail = (req, res) => {
@@ -50,19 +54,19 @@ exports.getCart = (req, res) => {
                 path: '/cart',
             });
         });
-        
+
     });
 };
 
 exports.postCart = (req, res) => {
-    const { productId, productPrice } = req.body; 
+    const { productId, productPrice } = req.body;
     const cartItem = new CartItem(productId, productPrice);
     cartItem.addToCart();
     res.redirect('/products');
 };
 
 exports.postRemoveFromCart = (req, res) => {
-    const { productId } = req.body; 
+    const { productId } = req.body;
     CartInstance.removeSingleProduct(productId);
     res.redirect('/cart');
 }
