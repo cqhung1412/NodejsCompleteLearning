@@ -65,7 +65,7 @@ exports.getCart = (req, res) => {
 };
 
 exports.postCart = (req, res) => {
-    const { productId, productPrice } = req.body;
+    const { productId } = req.body; // can't see total price
     let fetchedCart;
     let newQty = 1;
     req.user.getCart()
@@ -75,7 +75,7 @@ exports.postCart = (req, res) => {
         })
         .then(products => {
             let product = products.length > 0 && products[0];
-            newQty = product && product.cartItem.quantity + 1;
+            newQty = product ? product.cartItem.quantity + 1 : newQty;
             return Product.findByPk(productId);
         })
         .then(product => fetchedCart.addProduct(product, {
@@ -87,8 +87,11 @@ exports.postCart = (req, res) => {
 
 exports.postRemoveFromCart = (req, res) => {
     const { productId } = req.body;
-    CartInstance.removeSingleProduct(productId);
-    res.redirect('/cart');
+    req.user.getCart()
+        .then(cart => cart.getProducts({ where: { id: productId } }))
+        .then(products => products[0].cartItem.destroy())
+        .then(result => res.redirect('/cart'))
+        .catch(err => console.log(err));
 }
 
 exports.getCheckout = (req, res) => {
