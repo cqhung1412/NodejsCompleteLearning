@@ -42,22 +42,27 @@ exports.getProductDetail = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-    CartInstance.fetchAll((cartProducts, totalPrice) => {
-        Product.fetchAll(allProducts => {
-            const fullCartProducts = [];
-            cartProducts.forEach(cartProd => {
-                const productById = allProducts.find(prod => prod.id === cartProd.id);
-                fullCartProducts.push({ ...productById, qty: cartProd.qty }); // not functional programming
-            });
+    req.user.getCart()
+        .then(cart => cart.getProducts())
+        .then(products => {
             res.render('customer/cart', {
-                prods: fullCartProducts,
-                totalPrice: totalPrice,
+                prods: products,
                 pageTitle: 'My Cart',
                 path: '/cart',
             });
-        });
+        })
+        .catch(err => console.log(err));
+    // CartInstance.fetchAll((cartProducts, totalPrice) => {
+    //     Product.fetchAll(allProducts => {
+    //         const fullCartProducts = [];
+    //         cartProducts.forEach(cartProd => {
+    //             const productById = allProducts.find(prod => prod.id === cartProd.id);
+    //             fullCartProducts.push({ ...productById, qty: cartProd.qty }); // not functional programming
+    //         });
+    //         
+    //     });
 
-    });
+    // });
 };
 
 exports.postCart = (req, res) => {
