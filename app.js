@@ -60,7 +60,7 @@ sequelize.sync(/*{ force: true }*/)
                 password: Math.round(Date.now() + Math.random()) + '',
                 role: 'ADMIN',
                 name: 'Bear Barry'
-            })
+            });
         }
         else {
             return user;

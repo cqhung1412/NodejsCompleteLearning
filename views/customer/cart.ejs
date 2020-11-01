@@ -7,12 +7,12 @@
     <main>
         <h1>My Cart</h1>
         <% if (prods.length > 0) { %>
-        <h3>Total Price: <%= totalPrice %>$</h3>
+        <!-- <h3>Total Price: < totalPrice >$</h3> -->
         <div class="grid">
             <% for (let product of prods) { %>
             <article class="card product-item" style="width: 70%; display: flex; flex-direction: row; justify-content: space-between;">
                 <header class="card__content" style="flex: none;">
-                    <p class="product__description"><%= product.title %> (<%= product.qty %>)</p>
+                    <p class="product__description"><%= product.title %> (<%= product.quantity %>)</p>
                     <p class="product__price">Unit Price: <%= product.price %>$</p>
                 </header>
                 <div class="card__actions">
