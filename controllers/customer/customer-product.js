@@ -52,16 +52,6 @@ exports.getCart = (req, res) => {
             });
         })
         .catch(err => console.log(err));
-    // CartInstance.fetchAll((cartProducts, totalPrice) => {
-    //     Product.fetchAll(allProducts => {
-    //         const fullCartProducts = [];
-    //         cartProducts.forEach(cartProd => {
-    //             const productById = allProducts.find(prod => prod.id === cartProd.id);
-    //             fullCartProducts.push({ ...productById, qty: cartProd.qty }); // not functional programming
-    //         });
-    //         
-    //     });
-    // });
 };
 
 exports.postCart = (req, res) => {
@@ -107,3 +97,18 @@ exports.getOrders = (req, res) => {
         path: '/orders',
     })
 };
+
+exports.postOrder = (req, res) => {
+    req.user.getCart()
+        .then(cart => cart.getProducts())
+        .then(products => {
+            return req.user.createOrder()
+                .then(order => order.addProducts(products.map(prod => {
+                    prod.orderItem = { quantity: prod.cartItem.quantity };
+                    return prod;
+                })))
+                .catch(err => console.log(err));
+        })
+        .then(result => res.redirect('/orders'))
+        .catch(err => console.log(err));
+}

@@ -24,6 +24,8 @@ Router.post('/remove-from-cart', productController.postRemoveFromCart)
 Router.get('/checkout', productController.getCheckout);
 
 // Order page
+Router.post('/order', productController.postOrder);
+
 Router.get('/orders', productController.getOrders);
 
 module.exports = Router;
