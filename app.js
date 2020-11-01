@@ -18,6 +18,8 @@ app.set('views', 'views'); // default
 const adminRoutes = require('./routes/admin');
 const customerRoutes = require('./routes/customer');
 const CartItem = require('./models/cartItem');
+const Order = require('./models/order');
+const OrderItem = require('./models/orderItem');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -46,9 +48,15 @@ User.hasMany(Product);
 // User has 1 cart
 User.hasOne(Cart);
 Cart.belongsTo(User);
-// Cart has many products/A product belongs to many carts
+// A cart has many products/A product belongs to many carts
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+// User has many orders
+User.hasMany(Order);
+Order.belongsTo(User);
+// An order has many products/A product belongs to many orders
+Order.belongsToMany(Product, { through: OrderItem });
+// Product.belongsToMany(Order, { through: OrderItem });
 
 sequelize.sync(/*{ force: true }*/)
     .then(result => User.findByPk(1))
@@ -56,7 +64,7 @@ sequelize.sync(/*{ force: true }*/)
         if (!user) {
             return User.create({
                 id: 1,
-                email:'cqhung@node.com',
+                email: 'cqhung@node.com',
                 password: Math.round(Date.now() + Math.random()) + '',
                 role: 'ADMIN',
                 name: 'Bear Barry'

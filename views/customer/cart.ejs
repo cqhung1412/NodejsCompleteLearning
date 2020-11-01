@@ -25,6 +25,9 @@
             </article>
             <% } %>
         </div>
+        <form action="/checkout", method="GET" class="centered">
+            <button class="btn" type="submit">Checkout Now!</button>
+        </form>
         <% } else { %>
         <h1>No product currently in your cart</h1>
         <a href="/products" class="btn">Find One Now!</a>
