@@ -12,7 +12,7 @@
             <% for (let product of prods) { %>
             <article class="card product-item" style="width: 70%; display: flex; flex-direction: row; justify-content: space-between;">
                 <header class="card__content" style="flex: none;">
-                    <p class="product__description"><%= product.title %> (<%= product.quantity %>)</p>
+                    <p class="product__description"><%= product.title %> <strong>(<%= product.cartItem.quantity %>)</strong></p>
                     <p class="product__price">Unit Price: <%= product.price %>$</p>
                 </header>
                 <div class="card__actions">

@@ -46,7 +46,7 @@ exports.getCart = (req, res) => {
         .then(cart => cart.getProducts())
         .then(products => {
             res.render('customer/cart', {
-                prods: products, // no qty here
+                prods: products,
                 pageTitle: 'My Cart',
                 path: '/cart',
             });
@@ -61,38 +61,28 @@ exports.getCart = (req, res) => {
     //         });
     //         
     //     });
-
     // });
 };
 
 exports.postCart = (req, res) => {
     const { productId, productPrice } = req.body;
     let fetchedCart;
+    let newQty = 1;
     req.user.getCart()
         .then(cart => {
             fetchedCart = cart;
-            return cart.getProducts({ where: { id: productId }});
+            return cart.getProducts({ where: { id: productId } });
         })
         .then(products => {
-            let product;
-            if (products.length > 0) {
-                product = products[0];
-            }
-            let newQty = 1;
-            if (product) {
-                // quantity of the product >= 1
-                // then increment qty
-            }
-            return Product.findByPk(productId)
-                .then(product => fetchedCart.addProduct(product, { 
-                    through: { quantity: newQty } 
-                }))
+            let product = products.length > 0 && products[0];
+            newQty = product && product.cartItem.quantity + 1;
+            return Product.findByPk(productId);
         })
+        .then(product => fetchedCart.addProduct(product, {
+            through: { quantity: newQty }
+        }))
         .then(() => res.redirect('/products'))
         .catch(err => console.log(err));
-    // const cartItem = new CartItem(productId, productPrice);
-    // cartItem.addToCart();
-    // 
 };
 
 exports.postRemoveFromCart = (req, res) => {
