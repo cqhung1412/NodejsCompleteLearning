@@ -1,9 +1,3 @@
-.product-form {
-  width: 20rem;
-  max-width: 90%;
-  margin: auto;
-}
-
 .form-control {
   margin: 1rem 0;
 }
@@ -25,5 +19,5 @@
 
 .form-control input:focus,
 .form-control textarea:focus {
-  outline-color: #028677;
+  outline-color: #00695c;
 }
