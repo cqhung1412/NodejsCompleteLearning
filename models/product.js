@@ -1,24 +1,26 @@
-const Sequelize = require('sequelize');
+const { get404 } = require('../controllers/errors');
 
-const sequelize = require('../util/database');
+const getDatabase = require('../util/database').getDatabase;
 
-const Product = sequelize.define('product', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true
-  },
-  title: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  price: {
-    type: Sequelize.DOUBLE,
-    allowNull: false
-  },
-  imgUrl: Sequelize.STRING,
-  description: Sequelize.STRING
-});
+class Product {
+  constructor(title, price, imgUrl, description) {
+    this.title = title;
+    this.price = price;
+    this.imgUrl = imgUrl;
+    this.description = description;
+  }
+
+  save() {
+    const db = getDatabase();
+    db.collection('products').insertOne(this)
+      .then(result => {
+        console.log(result);
+      })
+      .catch(err => {
+        console.log(err);
+        get404();
+      });
+  }
+}
 
 module.exports = Product;

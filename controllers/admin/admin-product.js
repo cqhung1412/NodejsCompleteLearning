@@ -1,5 +1,4 @@
 const Product = require('../../models/product');
-const { get404 } = require('../errors');
 
 exports.getEditProduct = (req, res) => {
     const { productId } = req.params;
