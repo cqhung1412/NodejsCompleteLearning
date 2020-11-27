@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 
 const user = 'cqhung1412';
-const password = '9Jj7pemPcodC7ULy';
+const password = 'jaVFccX3gHd47Qh4';
 const dbname = 'shop';
 
 const uri = `mongodb+srv://${user}:${password}@nodejs-cluster0.pvske.mongodb.net/${dbname}?retryWrites=true&w=majority`;

@@ -40,15 +40,9 @@ exports.postEditProduct = (req, res) => {
 
 exports.postAddProduct = (req, res) => {
     const { title, imgUrl, price, description } = req.body;
-    req.user.createProduct({
-        title,
-        price,
-        imgUrl,
-        description
-    })
-        .then(result => {
-            res.redirect('/admin/add-product');
-        })
+    const product = new Product(title, price, imgUrl, description);
+    product.save()
+        .then(result => res.redirect('/admin/add-product'))
         .catch(err => console.log(err));
 };
 
