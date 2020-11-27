@@ -20,7 +20,7 @@ Router.get('/add-product', productController.getEditProduct);
 // /admin/add-product => POST
 Router.post('/add-product', productController.postAddProduct);
 
-// // /admin/products => GET
-// Router.get('/products', productController.getProducts);
+// /admin/products => GET
+Router.get('/products', productController.getProducts);
 
 module.exports = Router;

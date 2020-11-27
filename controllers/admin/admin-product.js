@@ -47,7 +47,7 @@ exports.postAddProduct = (req, res) => {
 };
 
 exports.getProducts = (req, res) => {
-    req.user.getProducts()
+    Product.fetchAll()
         .then(products => {
             res.render('admin/products', {
                 prods: products,

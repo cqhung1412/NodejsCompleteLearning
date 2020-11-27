@@ -1,11 +1,8 @@
 const Product = require('../../models/product');
-const Cart = require('../../models/cart');
 const { get404 } = require('../errors');
 
-const { CartInstance, CartItem } = Cart;
-
 exports.getIndex = (req, res) => {
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
             res.render('customer/index', {
                 prods: products,
@@ -17,7 +14,7 @@ exports.getIndex = (req, res) => {
 };
 
 exports.getProducts = (req, res) => {
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
             res.render('customer/products', {
                 prods: products,

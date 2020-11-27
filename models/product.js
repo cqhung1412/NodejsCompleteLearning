@@ -19,6 +19,16 @@ class Product {
         get404();
       });
   }
+
+  static fetchAll() {
+    const db = getDatabase()
+    return db.collection('products').find().toArray()
+      .then(products => products)
+      .catch(err => {
+        console.log(err);
+        get404();
+      });
+  }
 }
 
 module.exports = Product;

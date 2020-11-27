@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views'); // default
 
 const adminRoutes = require('./routes/admin');
-// const customerRoutes = require('./routes/customer');
+const customerRoutes = require('./routes/customer');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/admin', adminRoutes);
+app.use('/', customerRoutes);
 // app.use(customerRoutes);
 
 // Catch all
