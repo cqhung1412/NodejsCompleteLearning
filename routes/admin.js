@@ -5,8 +5,8 @@ const productController = require('../controllers/admin/admin-product')
 const Router = express.Router();
 
 
-// // /admin/edit-product/:id => GET
-// Router.get('/edit-product/:productId', productController.getEditProduct);
+// /admin/edit-product/:id => GET
+Router.get('/edit-product/:productId', productController.getEditProduct);
 
 // // /admin/edit-product => POST
 // Router.post('/edit-product', productController.postEditProduct);

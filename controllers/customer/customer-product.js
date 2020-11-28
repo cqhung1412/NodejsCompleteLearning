@@ -27,8 +27,8 @@ exports.getProducts = (req, res) => {
 
 exports.getProductDetail = (req, res) => {
     const prodId = req.params.productId;
-    Product.findByPk(prodId)
-        .then((product) => {
+    Product.fetchById(prodId)
+        .then(product => {
             res.render('customer/product-detail', {
                 product: product,
                 pageTitle: product.title,

@@ -10,8 +10,8 @@ Router.get('/', productController.getIndex);
 // Product page
 Router.get('/products', productController.getProducts);
 
-// // Product detail page
-// Router.get('/products/:productId', productController.getProductDetail);
+// Product detail page
+Router.get('/products/:productId', productController.getProductDetail);
 
 // // Cart page
 // Router.get('/cart', productController.getCart);

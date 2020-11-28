@@ -4,7 +4,7 @@ exports.getEditProduct = (req, res) => {
     const { productId } = req.params;
     const { isEditing } = req.query;
     if (isEditing) {
-        Product.findByPk(productId)
+        Product.fetchById(productId)
             .then(product => {
                 res.render('admin/edit-product', {
                     pageTitle: 'Admin - Edit Product',
@@ -26,7 +26,7 @@ exports.getEditProduct = (req, res) => {
 
 exports.postEditProduct = (req, res) => {
     const { productId, title, imgUrl, price, description } = req.body;
-    Product.findByPk(productId)
+    Product.fetchById(productId)
         .then(product => {
             product.title = title;
             product.price = price;
@@ -60,7 +60,7 @@ exports.getProducts = (req, res) => {
 
 exports.postDeleteProduct = (req, res) => {
     const { productId } = req.body;
-    Product.findByPk(productId)
+    Product.fetchById(productId)
         .then(product => product.destroy())
         .then(result => res.redirect('/admin/products'))
         .catch(err => console.log(err));

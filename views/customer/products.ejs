@@ -17,8 +17,8 @@
                         <p class="card-text"><%= product.description %></p>
                     </div>
                     <div class="card-body d-flex justify-content-around">
-                        <form action="/products/<%= product.id %>" method="GET">
-                            <button class="btn btn-outline-primary" type="submit">Edit</button>
+                        <form action="/products/<%= product._id %>" method="GET">
+                            <button class="btn btn-outline-primary" type="submit">Details</button>
                         </form>
                         <%- include('../includes/add-to-cart.ejs', {product: product}) %>
                     </div>

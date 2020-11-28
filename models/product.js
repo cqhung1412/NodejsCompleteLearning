@@ -1,5 +1,6 @@
 const { get404 } = require('../controllers/errors');
 
+const mongodb = require('mongodb');
 const getDatabase = require('../util/database').getDatabase;
 
 class Product {
@@ -21,9 +22,21 @@ class Product {
   }
 
   static fetchAll() {
-    const db = getDatabase()
+    const db = getDatabase();
     return db.collection('products').find().toArray()
       .then(products => products)
+      .catch(err => {
+        console.log(err);
+        get404();
+      });
+  }
+
+  static fetchById(prodId) {
+    const db = getDatabase();
+    return db.collection('products').find({
+      _id: new mongodb.ObjectID(prodId)
+    }).next()
+      .then(product => product)
       .catch(err => {
         console.log(err);
         get404();
