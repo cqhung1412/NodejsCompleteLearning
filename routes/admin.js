@@ -8,11 +8,11 @@ const Router = express.Router();
 // /admin/edit-product/:id => GET
 Router.get('/edit-product/:productId', productController.getEditProduct);
 
-// // /admin/edit-product => POST
-// Router.post('/edit-product', productController.postEditProduct);
+// /admin/edit-product => POST
+Router.post('/edit-product', productController.postEditProduct);
 
-// // /admin/delete-product => POST
-// Router.post('/delete-product', productController.postDeleteProduct);
+// /admin/delete-product => POST
+Router.post('/delete-product', productController.postDeleteProduct);
 
 // /admin/add-product => GET
 Router.get('/add-product', productController.getEditProduct);

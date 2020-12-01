@@ -2,10 +2,12 @@ const Product = require('../../models/product');
 
 exports.getEditProduct = (req, res) => {
     const { productId } = req.params;
-    const { isEditing } = req.query;
+    const isEditing = req.query.edit;
     if (isEditing) {
         Product.fetchById(productId)
             .then(product => {
+                if (!product)
+                    return res.sendStatus(404);
                 res.render('admin/edit-product', {
                     pageTitle: 'Admin - Edit Product',
                     path: '/admin/edit-product' + productId,
@@ -26,14 +28,14 @@ exports.getEditProduct = (req, res) => {
 
 exports.postEditProduct = (req, res) => {
     const { productId, title, imgUrl, price, description } = req.body;
-    Product.fetchById(productId)
-        .then(product => {
-            product.title = title;
-            product.price = price;
-            product.imgUrl = imgUrl;
-            product.description = description;
-            return product.save();
-        })
+    const product = new Product(
+        title, 
+        price, 
+        imgUrl, 
+        description, 
+        productId
+    );
+    product.save()
         .then(result => res.redirect('/admin/products'))
         .catch(err => console.log(err));
 };
@@ -42,7 +44,7 @@ exports.postAddProduct = (req, res) => {
     const { title, imgUrl, price, description } = req.body;
     const product = new Product(title, price, imgUrl, description);
     product.save()
-        .then(result => res.redirect('/admin/add-product'))
+        .then(result => res.redirect('/admin/products'))
         .catch(err => console.log(err));
 };
 
@@ -60,8 +62,7 @@ exports.getProducts = (req, res) => {
 
 exports.postDeleteProduct = (req, res) => {
     const { productId } = req.body;
-    Product.fetchById(productId)
-        .then(product => product.destroy())
-        .then(result => res.redirect('/admin/products'))
+    Product.deleteById(productId)
+        .then(() => res.redirect('/admin/products'))
         .catch(err => console.log(err));
 }
