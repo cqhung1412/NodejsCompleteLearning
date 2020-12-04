@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 
 const errorController = require('./controllers/errors');
 
+const User = require('./models/user');
+
 const app = express();
 
 const user = 'cqhung1412';
@@ -23,6 +25,15 @@ const customerRoutes = require('./routes/customer');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+    User.findById('5fca7b3e61e222383c943def')
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
+});
+
 app.use('/admin', adminRoutes);
 app.use('/', customerRoutes);
 // app.use(customerRoutes);
@@ -35,5 +46,19 @@ mongoose.connect(uri, {
     useUnifiedTopology: true,
     useFindAndModify: false
 })
-    .then(result => app.listen(6900))
+    .then(result => {
+        User.findOne()
+            .then(user => {
+                if (!user) {
+                    const user = new User({
+                        name: 'Bear',
+                        email: 'bear@node.com',
+                        cart: { items: [] }
+                    });
+                    user.save();
+                }
+            })
+            .catch(err => console.log(err));
+        app.listen(6900);
+    })
     .catch(err => console.log(err));
