@@ -5,8 +5,8 @@
 <body>
     <%- include('../includes/navigation.ejs') %>
     <main class="container-fluid">
-        <h1>My Cart</h1>
         <% if (prods.length > 0) { %>
+        <h1>My Cart</h1>
         <!-- <h3>Total Price: < totalPrice >$</h3> -->
         <div>
             <% for (let product of prods) { %>
@@ -25,12 +25,12 @@
             </article>
             <% } %>
         </div>
-        <form action="/order", method="POST" class="">
+        <form action="/order" , method="POST" class="">
             <button class="btn btn-success" type="submit">Checkout Now!</button>
         </form>
         <% } else { %>
         <h1>No product currently in your cart</h1>
-        <a href="/products" class="btn">Find One Now!</a>
+        <a href="/products" class="btn btn-primary">Find One Now!</a>
         <% } %>
     </main>
     <%- include('../includes/end.ejs') %>

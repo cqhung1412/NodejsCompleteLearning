@@ -58,17 +58,14 @@ exports.postCart = (req, res) => {
     const { productId } = req.body;
     Product.findById(productId)
         .then(product => req.user.addToCart(product))
-        .then(result => console.log(result))
         .then(() => res.redirect('/products'))
         .catch(err => console.log(err));
 };
 
 exports.postRemoveFromCart = (req, res) => {
     const { productId } = req.body;
-    req.user.getCart()
-        .then(cart => cart.getProducts({ where: { id: productId } }))
-        .then(products => products[0].cartItem.destroy())
-        .then(result => res.redirect('/cart'))
+    req.user.removeFromCart(productId)
+        .then(() => res.redirect('/cart'))
         .catch(err => console.log(err));
 }
 
