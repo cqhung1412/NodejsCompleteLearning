@@ -2,7 +2,7 @@ const Product = require('../../models/product');
 const { get404 } = require('../errors');
 
 exports.getIndex = (req, res) => {
-    Product.fetchAll()
+    Product.find()
         .then(products => {
             res.render('customer/index', {
                 prods: products,
@@ -14,7 +14,7 @@ exports.getIndex = (req, res) => {
 };
 
 exports.getProducts = (req, res) => {
-    Product.fetchAll()
+    Product.find()
         .then(products => {
             res.render('customer/products', {
                 prods: products,
@@ -27,7 +27,7 @@ exports.getProducts = (req, res) => {
 
 exports.getProductDetail = (req, res) => {
     const prodId = req.params.productId;
-    Product.fetchById(prodId)
+    Product.findById(prodId)
         .then(product => {
             res.render('customer/product-detail', {
                 product: product,
