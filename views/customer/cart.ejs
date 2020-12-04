@@ -4,29 +4,29 @@
 
 <body>
     <%- include('../includes/navigation.ejs') %>
-    <main>
+    <main class="container-fluid">
         <h1>My Cart</h1>
         <% if (prods.length > 0) { %>
         <!-- <h3>Total Price: < totalPrice >$</h3> -->
-        <div class="grid">
+        <div>
             <% for (let product of prods) { %>
-            <article class="card product-item" style="width: 70%; display: flex; flex-direction: row; justify-content: space-between;">
-                <header class="card__content" style="flex: none;">
-                    <p class="product__description"><%= product.title %> <strong>(<%= product.cartItem.quantity %>)</strong></p>
-                    <p class="product__price">Unit Price: <%= product.price %>$</p>
+            <article class="my-4 p-3 w-75 d-flex flex-row justify-content-between border">
+                <header class="">
+                    <p class=""><%= product.productId.title %> <strong>(<%= product.quantity %>)</strong></p>
+                    <p class="">Unit Price: <%= product.productId.price %>$</p>
                 </header>
-                <div class="card__actions">
-                    <a href="/products/<%= product.id %>" class="btn">Details</a>
+                <div class="d-flex flex-column justify-content-between">
+                    <a href="/products/<%= product.id %>" class="btn btn-info">View Details</a>
                     <form action="/remove-from-cart" method="POST">
-                        <button class="btn">Remove From Cart</button>
-                        <input type="hidden" value="<%= product.id %>" name="productId">
+                        <button class="btn btn-danger">Remove From Cart</button>
+                        <input type="hidden" value="<%= product.productId._id %>" name="productId">
                     </form>
                 </div>
             </article>
             <% } %>
         </div>
-        <form action="/order", method="POST" class="centered">
-            <button class="btn" type="submit">Checkout Now!</button>
+        <form action="/order", method="POST" class="">
+            <button class="btn btn-success" type="submit">Checkout Now!</button>
         </form>
         <% } else { %>
         <h1>No product currently in your cart</h1>

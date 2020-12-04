@@ -1,4 +1,5 @@
 const Product = require('../../models/product');
+const User = require('../../models/user');
 const { get404 } = require('../errors');
 
 exports.getIndex = (req, res) => {
@@ -39,9 +40,11 @@ exports.getProductDetail = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-    req.user.getCart()
-        .then(cart => cart.getProducts())
-        .then(products => {
+    req.user
+        .populate('cart.items.productId')
+        .execPopulate()
+        .then(user => {
+            const products = user.cart.items;
             res.render('customer/cart', {
                 prods: products,
                 pageTitle: 'My Cart',
