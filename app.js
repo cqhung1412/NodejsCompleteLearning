@@ -21,6 +21,7 @@ app.set('views', 'views'); // default
 
 const adminRoutes = require('./routes/admin');
 const customerRoutes = require('./routes/customer');
+const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,9 +35,9 @@ app.use((req, res, next) => {
         .catch(err => console.log(err));
 });
 
-app.use('/admin', adminRoutes);
-app.use('/', customerRoutes);
-// app.use(customerRoutes);
+app.use('/admin', adminRoutes); // find admin auth first
+app.use(customerRoutes); // none then find customer auth
+app.use(authRoutes); // none then to login page
 
 // Catch all
 app.use(errorController.get404)
