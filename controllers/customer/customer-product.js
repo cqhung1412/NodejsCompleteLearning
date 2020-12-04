@@ -52,22 +52,10 @@ exports.getCart = (req, res) => {
 };
 
 exports.postCart = (req, res) => {
-    const { productId } = req.body; // can't see total price
-    let fetchedCart;
-    let newQty = 1;
-    req.user.getCart()
-        .then(cart => {
-            fetchedCart = cart;
-            return cart.getProducts({ where: { id: productId } });
-        })
-        .then(products => {
-            let product = products.length > 0 && products[0];
-            newQty = product ? product.cartItem.quantity + 1 : newQty;
-            return Product.findByPk(productId);
-        })
-        .then(product => fetchedCart.addProduct(product, {
-            through: { quantity: newQty }
-        }))
+    const { productId } = req.body;
+    Product.findById(productId)
+        .then(product => req.user.addToCart(product))
+        .then(result => console.log(result))
         .then(() => res.redirect('/products'))
         .catch(err => console.log(err));
 };

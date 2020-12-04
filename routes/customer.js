@@ -14,9 +14,9 @@ Router.get('/products', productController.getProducts);
 Router.get('/products/:productId', productController.getProductDetail);
 
 // // Cart page
-// Router.get('/cart', productController.getCart);
+Router.get('/cart', productController.getCart);
 
-// Router.post('/cart', productController.postCart);
+Router.post('/cart', productController.postCart);
 
 // Router.post('/remove-from-cart', productController.postRemoveFromCart)
 
