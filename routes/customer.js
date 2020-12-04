@@ -4,14 +4,14 @@ const productController = require('../controllers/customer/customer-product')
 
 const Router = express.Router();
 
-// Landing page
-Router.get('/', productController.getIndex);
+// // Landing page
+// Router.get('/', productController.getIndex);
 
-// Product page
-Router.get('/products', productController.getProducts);
+// // Product page
+// Router.get('/products', productController.getProducts);
 
-// Product detail page
-Router.get('/products/:productId', productController.getProductDetail);
+// // Product detail page
+// Router.get('/products/:productId', productController.getProductDetail);
 
 // // Cart page
 // Router.get('/cart', productController.getCart);
