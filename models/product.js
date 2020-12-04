@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const Product = new Schema({
+const productSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -12,10 +12,15 @@ const Product = new Schema({
         required: true
     },
     description: String,
-    imgUrl: String
+    imgUrl: String,
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
 
-module.exports = mongoose.model('Product', Product);
+module.exports = mongoose.model('Product', productSchema);
 
 // const { get404 } = require('../controllers/errors');
 
