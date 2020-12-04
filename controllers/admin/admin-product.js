@@ -2,7 +2,10 @@ const Product = require('../../models/product');
 
 exports.getProducts = (req, res) => {
     Product.find()
+        // .select('title price imgUrl -_id')
+        // .populate('userId', 'name -_id')
         .then(products => {
+            console.log(products);
             res.render('admin/products', {
                 prods: products,
                 pageTitle: 'Admin Products',
