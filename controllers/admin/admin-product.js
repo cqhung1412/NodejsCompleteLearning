@@ -5,7 +5,8 @@ exports.getProducts = (req, res) => {
         .then(products => res.render('admin/products', {
             prods: products,
             pageTitle: 'Admin Products',
-            path: '/admin/products'
+            path: '/admin/products',
+            isAuth: req.isLoggedIn
         }))
         .catch(err => console.log(err));
 };
@@ -22,7 +23,8 @@ exports.getEditProduct = (req, res) => {
                     pageTitle: 'Admin - Edit Product',
                     path: '/admin/edit-product' + productId,
                     product: product,
-                    editing: isEditing
+                    editing: isEditing,
+                    isAuth: req.isLoggedIn
                 });
             })
             .catch(err => console.log(err));
