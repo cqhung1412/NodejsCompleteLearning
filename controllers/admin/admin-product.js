@@ -2,14 +2,11 @@ const Product = require('../../models/product');
 
 exports.getProducts = (req, res) => {
     Product.find()
-        .then(products => {
-            console.log(products);
-            res.render('admin/products', {
-                prods: products,
-                pageTitle: 'Admin Products',
-                path: '/admin/products'
-            });
-        })
+        .then(products => res.render('admin/products', {
+            prods: products,
+            pageTitle: 'Admin Products',
+            path: '/admin/products'
+        }))
         .catch(err => console.log(err));
 };
 
@@ -70,4 +67,4 @@ exports.postDeleteProduct = (req, res) => {
     Product.findByIdAndRemove(productId)
         .then(() => res.redirect('/admin/products'))
         .catch(err => console.log(err));
-}
+};

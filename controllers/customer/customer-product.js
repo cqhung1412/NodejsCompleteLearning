@@ -4,38 +4,32 @@ const { get404 } = require('../errors');
 
 exports.getIndex = (req, res) => {
     Product.find()
-        .then(products => {
-            res.render('customer/index', {
-                prods: products,
-                pageTitle: 'My Nodejs Shop',
-                path: '/'
-            });
-        })
+        .then(products => res.render('customer/index', {
+            prods: products,
+            pageTitle: 'My Nodejs Shop',
+            path: '/'
+        }))
         .catch(err => console.log(err));
 };
 
 exports.getProducts = (req, res) => {
     Product.find()
-        .then(products => {
-            res.render('customer/products', {
-                prods: products,
-                pageTitle: 'All Products',
-                path: '/products'
-            });
-        })
+        .then(products => res.render('customer/products', {
+            prods: products,
+            pageTitle: 'All Products',
+            path: '/products'
+        }))
         .catch(err => console.log(err));
 };
 
 exports.getProductDetail = (req, res) => {
     const prodId = req.params.productId;
     Product.findById(prodId)
-        .then(product => {
-            res.render('customer/product-detail', {
-                product: product,
-                pageTitle: product.title,
-                path: '/products' + prodId
-            });
-        })
+        .then(product => res.render('customer/product-detail', {
+            product: product,
+            pageTitle: product.title,
+            path: '/products' + prodId
+        }))
         .catch(err => console.log(err));
 };
 
@@ -67,27 +61,17 @@ exports.postRemoveFromCart = (req, res) => {
     req.user.removeFromCart(productId)
         .then(() => res.redirect('/cart'))
         .catch(err => console.log(err));
-}
-
-exports.getCheckout = (req, res) => {
-    res.render('customer/checkout', {
-        pageTitle: 'Let\'s Checkout',
-        path: '/checkout',
-    })
 };
 
 exports.getOrders = (req, res) => {
     Order.find({
         "user.userId": req.user._id
     })
-        .then(orders => {
-            console.log(orders)
-            res.render('customer/orders', {
-                pageTitle: 'Your Orders',
-                path: '/orders',
-                orders: orders
-            })
-        })
+        .then(orders => res.render('customer/orders', {
+            pageTitle: 'Your Orders',
+            path: '/orders',
+            orders: orders
+        }))
         .catch(err => console.log(err));
 };
 
@@ -112,4 +96,4 @@ exports.postOrder = (req, res) => {
         .then(result => req.user.clearCart())
         .then(result => res.redirect('/cart'))
         .catch(err => console.log(err));
-}
+};

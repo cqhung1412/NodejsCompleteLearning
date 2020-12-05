@@ -20,9 +20,6 @@ Router.post('/cart', productController.postCart);
 
 Router.post('/remove-from-cart', productController.postRemoveFromCart);
 
-// Checkout page
-Router.get('/checkout', productController.getCheckout);
-
 // Order page
 Router.post('/order', productController.postOrder);
 

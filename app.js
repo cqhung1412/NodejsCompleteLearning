@@ -47,19 +47,16 @@ mongoose.connect(uri, {
     useUnifiedTopology: true,
     useFindAndModify: false
 })
-    .then(result => {
-        User.findOne()
-            .then(user => {
-                if (!user) {
-                    const user = new User({
-                        name: 'Bear',
-                        email: 'bear@node.com',
-                        cart: { items: [] }
-                    });
-                    user.save();
-                }
-            })
-            .catch(err => console.log(err));
-        app.listen(6900);
+    .then(result => User.findOne())
+    .then(user => {
+        if (!user) {
+            const user = new User({
+                name: 'Bear',
+                email: 'bear@node.com',
+                cart: { items: [] }
+            });
+            return user.save();
+        }
     })
+    .then(result => app.listen(6900))
     .catch(err => console.log(err));

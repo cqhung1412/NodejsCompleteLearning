@@ -3,4 +3,4 @@ exports.getLogin = (req, res, next) => {
         path: '/login',
         pageTitle: 'Login'
     });
-}
+};
