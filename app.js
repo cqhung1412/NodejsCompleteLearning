@@ -38,14 +38,16 @@ app.use(session({
     store: store
 }));
 
-// app.use((req, res, next) => {
-//     User.findById('5fca7b3e61e222383c943def')
-//         .then(user => {
-//             req.user = user;
-//             next();
-//         })
-//         .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+    if (!req.session.userId)
+        next();
+    User.findById(req.session.userId)
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
+});
 
 app.use('/admin', adminRoutes); // find admin auth first
 app.use(customerRoutes); // none then find customer auth
