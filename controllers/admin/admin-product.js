@@ -68,7 +68,7 @@ exports.postEditProduct = (req, res) => {
 };
 
 exports.postAddProduct = (req, res) => {
-    const { isLoggedIn } = req.session;
+    const { isLoggedIn, userId } = req.session;
     if (isLoggedIn) {
         const { title, imgUrl, price, description } = req.body;
         const product = new Product({
@@ -76,7 +76,7 @@ exports.postAddProduct = (req, res) => {
             price: price,
             description: description,
             imgUrl: imgUrl,
-            userId: req.user
+            userId: userId
         });
         product.save()
             .then(result => res.redirect('/admin/products'))

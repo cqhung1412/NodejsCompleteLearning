@@ -1,5 +1,6 @@
 const Product = require('../../models/product');
 const Order = require('../../models/order');
+const User = require('../../models/user');
 const { get404 } = require('../errors');
 
 exports.getIndex = (req, res) => {
@@ -40,28 +41,39 @@ exports.getProductDetail = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-    const { isLoggedIn } = req.session;
-    req.user
-        .populate('cart.items.productId')
-        .execPopulate()
-        .then(user => {
-            const products = user.cart.items;
-            res.render('customer/cart', {
-                prods: products,
-                pageTitle: 'My Cart',
-                path: '/cart',
-                isAuth: isLoggedIn
-            });
-        })
-        .catch(err => console.log(err));
+    const { isLoggedIn, userId } = req.session;
+    if (isLoggedIn) {
+        User.findById(userId)
+            .then(user => {
+                user.populate('cart.items.productId')
+                    .execPopulate()
+                    .then(userWithCartProd => {
+                        const products = userWithCartProd.cart.items;
+                        res.render('customer/cart', {
+                            prods: products,
+                            pageTitle: 'My Cart',
+                            path: '/cart',
+                            isAuth: isLoggedIn
+                        });
+                    })
+                    .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+    } else {
+        get404(req, res);
+    }
 };
 
 exports.postCart = (req, res) => {
-    const { isLoggedIn } = req.session;
+    const { isLoggedIn, userId } = req.session;
     if (isLoggedIn) {
         const { productId } = req.body;
         Product.findById(productId)
-            .then(product => req.user.addToCart(product))
+            .then(product => {
+                User.findById(userId)
+                    .then(user => user.addToCart(product))
+                    .catch(err => console.log(err));
+            })
             .then(() => res.redirect('/products'))
             .catch(err => console.log(err));
     } else {
@@ -70,10 +82,11 @@ exports.postCart = (req, res) => {
 };
 
 exports.postRemoveFromCart = (req, res) => {
-    const { isLoggedIn } = req.session;
+    const { isLoggedIn, userId } = req.session;
     if (isLoggedIn) {
         const { productId } = req.body;
-        req.user.removeFromCart(productId)
+        User.findById(userId)
+            .then(user => user.removeFromCart(productId))
             .then(() => res.redirect('/cart'))
             .catch(err => console.log(err));
     } else {
@@ -82,10 +95,10 @@ exports.postRemoveFromCart = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-    const { isLoggedIn } = req.session;
+    const { isLoggedIn, userId } = req.session;
     if (isLoggedIn) {
         Order.find({
-            "user.userId": req.user._id
+            "user.userId": userId
         })
             .then(orders => res.render('customer/orders', {
                 pageTitle: 'Your Orders',
@@ -100,28 +113,29 @@ exports.getOrders = (req, res) => {
 };
 
 exports.postOrder = (req, res) => {
-    const { isLoggedIn } = req.session;
+    const { isLoggedIn, userId } = req.session;
     if (isLoggedIn) {
-        req.user
-            .populate('cart.items.productId')
-            .execPopulate()
-            .then(user => {
-                const products = user.cart.items.map(item => ({
-                    quantity: item.quantity,
-                    product: { ...item.productId._doc }
-                }));
-                const order = new Order({
-                    user: {
-                        name: req.user.name,
-                        userId: req.user//._id
-                    },
-                    products: products
-                });
-                return order.save();
-            })
-            .then(result => req.user.clearCart())
-            .then(result => res.redirect('/cart'))
-            .catch(err => console.log(err));
+        User.findById(userId)
+            .then(user => user.populate('cart.items.productId')
+                .execPopulate()
+                .then(userWithCartProd => {
+                    const products = userWithCartProd.cart.items.map(item => ({
+                        quantity: item.quantity,
+                        product: { ...item.productId._doc }
+                    }));
+                    const order = new Order({
+                        user: {
+                            name: user.name,
+                            userId: user//._id
+                        },
+                        products: products
+                    });
+                    return order.save();
+                })
+                .then(result => user.clearCart())
+                .then(result => res.redirect('/cart'))
+                .catch(err => console.log(err))
+            )
     } else {
         get404(req, res);
     }

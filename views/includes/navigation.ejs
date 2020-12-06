@@ -16,13 +16,13 @@
                 <li class="nav-item <%= path === '/products' && 'active' %>">
                     <a class="nav-link" href="/products">Products</a>
                 </li>
+                <% if (isAuth) { %>
                 <li class="nav-item <%= path === '/cart' && 'active' %>">
                     <a class="nav-link" href="/cart">Cart</a>
                 </li>
                 <li class="nav-item <%= path === '/orders' && 'active' %>">
                     <a class="nav-link" href="/orders">Orders</a>
                 </li>
-                <% if (isAuth) { %>
                 <li class="nav-item <%= path === '/admin/products' && 'active' %>">
                     <a class="nav-link" href="/admin/products">Admin Products</a>
                 </li>
@@ -38,7 +38,11 @@
                 </li>
                 <% } else { %>
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
+                    <form action="/logout" method="POST">
+                        <button class="btn nav-link p-0" type="submit">
+                            Logout
+                        </button>
+                    </form> 
                 </li>
                 <% } %>
             </ul>
