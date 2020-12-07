@@ -1,20 +1,16 @@
 const Product = require('../../models/product');
-const { get404 } = require('../errors');
 
 exports.getProducts = (req, res) => {
-    const { isLoggedIn } = req.session;
     Product.find()
         .then(products => res.render('admin/products', {
             prods: products,
             pageTitle: 'Admin Products',
-            path: '/admin/products',
-            isAuth: isLoggedIn
+            path: '/admin/products'
         }))
         .catch(err => console.log(err));
 };
 
 exports.getEditProduct = (req, res) => {
-    const { isLoggedIn } = req.session;
     const isEditing = req.query.edit;
     const { productId } = req.params;
     if (isEditing) {
@@ -26,8 +22,7 @@ exports.getEditProduct = (req, res) => {
                     pageTitle: 'Admin - Edit Product',
                     path: '/admin/edit-product' + productId,
                     product: product,
-                    editing: isEditing,
-                    isAuth: isLoggedIn
+                    editing: isEditing
                 });
             })
             .catch(err => console.log(err));
@@ -36,8 +31,7 @@ exports.getEditProduct = (req, res) => {
         res.render('admin/edit-product', {
             pageTitle: 'Admin - Add Product',
             path: '/admin/add-product',
-            editing: false,
-            isAuth: isLoggedIn
+            editing: false
         });
     }
 };

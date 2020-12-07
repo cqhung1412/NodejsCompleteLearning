@@ -3,12 +3,10 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 exports.getLogin = (req, res) => {
-    const { isLoggedIn } = req.session;
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        isAuth: isLoggedIn,
-        csrfToken: req.csrfToken()
+        errorMessage: req.flash('error')
     });
 };
 
@@ -18,12 +16,14 @@ exports.postLogin = (req, res) => {
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
-                throw "User does not exist!";
+                req.flash('error', 'You\'ve entered an invalid email or password!');
+                return res.redirect('/login');
             }
             bcrypt.compare(password, user.password)
                 .then(doMatch => {
                     if (!doMatch) {
-                        throw "User does not exist!";
+                        req.flash('error', 'You\'ve entered an invalid email or password!');
+                        return res.redirect('/login');
                     }
                     req.session.userId = user._id;
                     req.session.isLoggedIn = true;
@@ -32,15 +32,9 @@ exports.postLogin = (req, res) => {
                         res.redirect('/');
                     });
                 })
-                .catch(err => {
-                    console.log(err);
-                    res.redirect(404, '/login');
-                });
+                .catch(err => console.log(err));
         })
-        .catch(err => {
-            console.log(err);
-            res.redirect(404, '/login');
-        });
+        .catch(err => console.log(err));
 };
 
 exports.postLogout = (req, res) => {
@@ -51,11 +45,10 @@ exports.postLogout = (req, res) => {
 };
 
 exports.getSignup = (req, res) => {
-    const { isLoggedIn } = req.session;
     res.render('auth/signup', {
         path: '/signup',
         pageTitle: 'Signup',
-        isAuth: isLoggedIn
+        errorMessage: req.flash('error')
     });
 };
 
@@ -64,7 +57,8 @@ exports.postSignup = (req, res) => {
     User.findOne({ email: email })
         .then(user => {
             if (user) {
-                return res.redirect('/signup', 409);
+                req.flash('error', 'Email have already existed!');
+                return res.redirect('./signup');
             } else {
                 return bcrypt.hash(password, 13)
                     .then(hashedPass => {

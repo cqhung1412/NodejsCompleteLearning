@@ -1,9 +1,11 @@
 <%- include('../includes/head.ejs') %>
 </head>
+
 <body>
     <%- include('../includes/navigation.ejs') %>
     <main class="w-25 container">
         <% if (!isAuth) { %>
+        <%- include('../includes/error-message.ejs') %>
         <form class="form" action="/login %>" method="POST">
             <div class="form-group">
                 <label for="email">E-Mail</label>
