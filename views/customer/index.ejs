@@ -7,9 +7,9 @@
 
     <main>
         <% if (prods.length > 0) { %>
-        <div class="container-fluid d-flex flex-row justify-content-around">
+        <div class="container-fluid d-flex flex-row justify-content-center">
             <% for (let product of prods) { %>
-            <article class="card" style="width: 18rem;">
+            <article class="card mr-4" style="width: 18rem;">
                 <img class="card-img-top" style="height: 15rem;" src="<%= product.imgUrl %>" alt="<%= product.title %>">
                 <div class="card-body">
                     <h5 class="card-title"><%= product.title %></h5>
