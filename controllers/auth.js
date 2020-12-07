@@ -42,5 +42,6 @@ exports.getSignup = (req, res) => {
 
 exports.postSignup = (req, res) => {
     const { email, password } = req.body;
+    
     res.redirect('/signup');
 };
