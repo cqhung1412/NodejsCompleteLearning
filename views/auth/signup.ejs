@@ -27,6 +27,7 @@
                 <input class="form-control" required type="password" name="confirmPassword" id="confirmPassword"
                 pattern=".{6,}">
             </div>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button class="btn btn-success" type="submit">Signup</button>
         </form>
         <% } else { %>

@@ -1,47 +1,38 @@
 const Product = require('../../models/product');
 const Order = require('../../models/order');
-const User = require('../../models/user');
-const { get404 } = require('../errors');
 
 exports.getIndex = (req, res) => {
-    const { isLoggedIn } = req.session;
     Product.find()
         .then(products => res.render('customer/index', {
             prods: products,
             pageTitle: 'My Nodejs Shop',
-            path: '/',
-            isAuth: isLoggedIn
+            path: '/'
         }))
         .catch(err => console.log(err));
 };
 
 exports.getProducts = (req, res) => {
-    const { isLoggedIn } = req.session;
     Product.find()
         .then(products => res.render('customer/products', {
             prods: products,
             pageTitle: 'All Products',
-            path: '/products',
-            isAuth: isLoggedIn
+            path: '/products'
         }))
         .catch(err => console.log(err));
 };
 
 exports.getProductDetail = (req, res) => {
-    const { isLoggedIn } = req.session;
     const prodId = req.params.productId;
     Product.findById(prodId)
         .then(product => res.render('customer/product-detail', {
             product: product,
             pageTitle: product.title,
-            path: '/products' + prodId,
-            isAuth: isLoggedIn
+            path: '/products' + prodId
         }))
         .catch(err => console.log(err));
 };
 
 exports.getCart = (req, res) => {
-    const { isLoggedIn } = req.session;
     req.user.populate('cart.items.productId')
         .execPopulate()
         .then(userWithCartProd => {
@@ -49,8 +40,7 @@ exports.getCart = (req, res) => {
             res.render('customer/cart', {
                 prods: products,
                 pageTitle: 'My Cart',
-                path: '/cart',
-                isAuth: isLoggedIn
+                path: '/cart'
             });
         })
         .catch(err => console.log(err));
@@ -74,21 +64,21 @@ exports.postRemoveFromCart = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-    const { isLoggedIn, userId } = req.session;
+    const { userId } = req.session;
     Order.find({
         "user.userId": userId
     })
         .then(orders => res.render('customer/orders', {
             pageTitle: 'Your Orders',
             path: '/orders',
-            orders: orders,
-            isAuth: isLoggedIn
+            orders: orders
         }))
         .catch(err => console.log(err));
 };
 
 exports.postOrder = (req, res) => {
-    req.user.populate('cart.items.productId')
+    const { user } = req;
+    user.populate('cart.items.productId')
         .execPopulate()
         .then(userWithCartProd => {
             const products = userWithCartProd.cart.items.map(item => ({

@@ -18,6 +18,7 @@
                 <div class="d-flex flex-column justify-content-between">
                     <a href="/products/<%= product.id %>" class="btn btn-info">View Details</a>
                     <form action="/remove-from-cart" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="btn btn-danger">Remove From Cart</button>
                         <input type="hidden" value="<%= product.productId._id %>" name="productId">
                     </form>
@@ -26,6 +27,7 @@
             <% } %>
         </div>
         <form action="/order" , method="POST" class="">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button class="btn btn-success" type="submit">Order Now!</button>
         </form>
         <% } else { %>
