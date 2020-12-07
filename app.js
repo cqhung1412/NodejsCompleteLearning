@@ -39,14 +39,16 @@ app.use(session({
 }));
 
 app.use((req, res, next) => {
-    if (!req.session.userId)
+    if (!req.session.userId) {
         next();
-    User.findById(req.session.userId)
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => console.log(err));
+    } else {
+        User.findById(req.session.userId)
+            .then(user => {
+                req.user = user;
+                next();
+            })
+            .catch(err => console.log(err));
+    }
 });
 
 app.use('/admin', adminRoutes); // find admin auth first

@@ -14,20 +14,32 @@ exports.getLogin = (req, res) => {
 exports.postLogin = (req, res) => {
     const { email, password } = req.body;
     // validate
-    User.findOne({ email: email, password: password })
+    User.findOne({ email: email })
         .then(user => {
-            if (user) {
-                req.session.userId = user._id;
-                req.session.isLoggedIn = true;
-                return req.session.save(err => {
-                    err && console.log(err);
-                    res.redirect('/');
-                });
-            } else {
-                return res.redirect('/login', 404);
+            if (!user) {
+                throw "User does not exist!";
             }
+            bcrypt.compare(password, user.password)
+                .then(doMatch => {
+                    if (!doMatch) {
+                        throw "User does not exist!";
+                    }
+                    req.session.userId = user._id;
+                    req.session.isLoggedIn = true;
+                    return req.session.save(err => {
+                        err && console.log(err);
+                        res.redirect('/');
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.redirect(404, '/login');
+                });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.redirect(404, '/login');
+        });
 };
 
 exports.postLogout = (req, res) => {
@@ -53,18 +65,19 @@ exports.postSignup = (req, res) => {
             if (user) {
                 return res.redirect('/signup', 409);
             } else {
-                return bcrypt.hash(password, 13);
+                return bcrypt.hash(password, 13)
+                    .then(hashedPass => {
+                        const newUser = new User({
+                            name: username,
+                            email: email,
+                            password: hashedPass,
+                            cart: { items: [] }
+                        });
+                        return newUser.save();
+                    })
+                    .then(result => res.redirect('./login'))
+                    .catch(err => console.log(err));
             }
         })
-        .then(hashedPass => {
-            const newUser = new User({
-                name: username,
-                email: email,
-                password: hashedPass,
-                cart: { items: [] }
-            });
-            return newUser.save();
-        })
-        .then(result => res.redirect('./login'))
         .catch(err => console.log(err));
 };
