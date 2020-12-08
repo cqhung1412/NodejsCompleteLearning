@@ -1,10 +1,10 @@
 const Product = require('../../models/product');
 
 exports.getProducts = (req, res) => {
-    Product.find()
+    Product.find({ userId: req.user._id })
         .then(products => res.render('admin/products', {
             prods: products,
-            pageTitle: 'Admin Products',
+            pageTitle: 'Your Products',
             path: '/admin/products'
         }))
         .catch(err => console.log(err));
@@ -38,7 +38,10 @@ exports.getEditProduct = (req, res) => {
 
 exports.postEditProduct = (req, res) => {
     const { productId, title, imgUrl, price, description } = req.body;
-    Product.findByIdAndUpdate(productId, {
+    Product.findOneAndUpdate({
+        _id: productId,
+        userId: req.user._id
+    }, {
         title: title,
         price: price,
         description: description,
@@ -59,13 +62,19 @@ exports.postAddProduct = (req, res) => {
         userId: userId
     });
     product.save()
-        .then(result => res.redirect('/admin/products'))
+        .then(result => {
+            console.log(result);
+            res.redirect('/admin/products');
+        })
         .catch(err => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res) => {
     const { productId } = req.body;
-    Product.findByIdAndRemove(productId)
-        .then(() => res.redirect('/admin/products'))
+    Product.deleteOne({ _id: productId, userId: req.user._id })
+        .then(result => {
+            console.log(result);
+            res.redirect('/admin/products');
+        })
         .catch(err => console.log(err));
 };
