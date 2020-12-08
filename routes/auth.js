@@ -16,4 +16,10 @@ Router.post('/signup', authController.postSignup);
 
 Router.get('/reset', authController.getResetPassword);
 
+Router.post('/reset', authController.postResetPassword);
+
+Router.get('/reset/:resetToken', authController.getNewPassword);
+
+Router.post('/new-password', authController.postNewPassword);
+
 module.exports = Router;
