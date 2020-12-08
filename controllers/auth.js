@@ -1,12 +1,31 @@
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
 
 const User = require('../models/user');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'bearnodelearning@gmail.com',
+        pass: 'bearnodetesting'
+    }
+});
+
+const signupEmail = (toEmail, name) => {
+    return {
+        from: 'Barry Bear',
+        to: toEmail,
+        subject: 'Welcome to Bear Shop :D',
+        html: '<h4>Welcome ' + name + '!</h4><p>We are glad to have you onboard :D</p>'
+    }
+}
 
 exports.getLogin = (req, res) => {
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        errorMessage: req.flash('error')
+        errorMessage: req.flash('error'),
+        successMessage: req.flash('success')
     });
 };
 
@@ -70,7 +89,18 @@ exports.postSignup = (req, res) => {
                         });
                         return newUser.save();
                     })
-                    .then(result => res.redirect('./login'))
+                    .then(result => {
+                        const emailOption = signupEmail(email, username);
+                        req.flash('success', 'Signup successfully, check your email :D');
+                        res.redirect('./login');
+                        return transporter.sendMail(emailOption, (err, info) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log('Message sent: ' + info.response);
+                            }
+                        });
+                    })
                     .catch(err => console.log(err));
             }
         })
