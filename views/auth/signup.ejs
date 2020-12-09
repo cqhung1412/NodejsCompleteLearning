@@ -9,8 +9,7 @@
         <form class="form needs-validation" action="/signup %>" method="POST" novalidate>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input required
-                    class="form-control <%= errors.find(e => e.param === 'username') && 'is-invalid' %>"
+                <input required class="form-control <%= errors.find(e => e.param === 'username') && 'is-invalid' %>"
                     type="text" name="username" id="username" value="<%= oldInputs.username %>"
                     placeholder="Enter your username">
                 <div class="invalid-feedback">
@@ -19,18 +18,15 @@
             </div>
             <div class="form-group">
                 <label for="email">E-Mail</label>
-                <input required
-                    class="form-control <%= errors.find(e => e.param === 'email') && 'is-invalid' %>"
-                    type="email" name="email" id="email" value="<%= oldInputs.email %>"
-                    placeholder="Enter your email">
+                <input required class="form-control <%= errors.find(e => e.param === 'email') && 'is-invalid' %>"
+                    type="email" name="email" id="email" value="<%= oldInputs.email %>" placeholder="Enter your email">
                 <div class="invalid-feedback">
                     <%= errors.find(e => e.param === 'email') && errors.find(e => e.param === 'email').msg %>
                 </div>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input required
-                    class="form-control <%= errors.find(e => e.param === 'password') && 'is-invalid' %>"
+                <input required class="form-control <%= errors.find(e => e.param === 'password') && 'is-invalid' %>"
                     type="password" name="password" id="password" pattern=".{6,}" value="<%= oldInputs.password %>"
                     placeholder="Minimun 6 characters">
                 <div class="invalid-feedback">
@@ -42,8 +38,7 @@
                 <input required
                     class="form-control <%= errors.find(e => e.param === 'confirmPassword') && 'is-invalid' %>"
                     type="password" name="confirmPassword" id="confirmPassword" pattern=".{6,}"
-                    value="<%= oldInputs.confirmPassword %>"
-                    placeholder="Repeat your password">
+                    value="<%= oldInputs.confirmPassword %>" placeholder="Repeat your password">
                 <div class="invalid-feedback">
                     <%= errors.find(e => e.param === 'confirmPassword') && errors.find(e => e.param === 'confirmPassword').msg %>
                 </div>

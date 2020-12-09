@@ -52,8 +52,13 @@ exports.getLogin = (req, res) => {
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
+        errors: [],
         errorMessage: req.flash('error'),
-        successMessage: req.flash('success')
+        successMessage: req.flash('success'),
+        oldInputs: {
+            email: '',
+            password: ''
+        }
     });
 };
 
@@ -65,8 +70,10 @@ exports.postLogin = (req, res) => {
         return res.status(422).render('auth/login', {
             path: '/login',
             pageTitle: 'Login',
-            errorMessage: errors.array()[0].msg,
-            successMessage: []
+            errors: errors.array(),
+            errorMessage: [],
+            successMessage: [],
+            oldInputs: { email, password }
         });
     }
     User.findOne({ email: email })
@@ -122,11 +129,11 @@ exports.postSignup = (req, res) => {
             path: '/signup',
             pageTitle: 'Signup',
             errors: errors.array(),
-            oldInputs: {
-                username: username,
-                email: email,
-                password: password,
-                confirmPassword: confirmPassword
+            oldInputs: { 
+                username, 
+                email, 
+                password, 
+                confirmPassword 
             }
         });
     }
