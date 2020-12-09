@@ -110,30 +110,21 @@ exports.postSignup = (req, res) => {
             errorMessage: errors.array()[0].msg
         });
     }
-    User.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                req.flash('error', 'Email have already existed!');
-                return res.redirect('./signup');
-            } else {
-                return bcrypt.hash(password, 13)
-                    .then(hashedPass => {
-                        const newUser = new User({
-                            name: username,
-                            email: email,
-                            password: hashedPass,
-                            cart: { items: [] }
-                        });
-                        return newUser.save();
-                    })
-                    .then(result => {
-                        const emailOption = signupEmail(email, username);
-                        req.flash('success', 'Signup successfully, check your email :D');
-                        res.redirect('./login');
-                        return sendEmail(emailOption);
-                    })
-                    .catch(err => console.log(err));
-            }
+    bcrypt.hash(password, 13)
+        .then(hashedPass => {
+            const newUser = new User({
+                name: username,
+                email: email,
+                password: hashedPass,
+                cart: { items: [] }
+            });
+            return newUser.save();
+        })
+        .then(result => {
+            const emailOption = signupEmail(email, username);
+            req.flash('success', 'Signup successfully, check your email :D');
+            res.redirect('./login');
+            return sendEmail(emailOption);
         })
         .catch(err => console.log(err));
 };
