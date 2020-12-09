@@ -3,38 +3,48 @@
 
 <body>
     <%- include('../includes/navigation.ejs') %>
-    <main class="w-25 container">
+    <main class="container-fluid">
         <% if (!isAuth) { %>
-        <%- include('../includes/error-message.ejs') %>
-        <%- include('../includes/success-message.ejs') %>
-        <form class="form needs-validation" action="/login %>" method="POST" novalidate>
-            <div class="form-group">
-                <label for="email">E-Mail</label>
-                <input required class="form-control <%= errors.find(e => e.param === 'email') && 'is-invalid' %>"
-                    type="email" name="email" id="email" value="<%= oldInputs.email %>">
-                <div class="invalid-feedback">
-                    <%= errors.find(e => e.param === 'email') && errors.find(e => e.param === 'email').msg %>
-                </div>
+        <div class="row">
+            <div class="col-1 col-lg-9">
+                <!-- <img src="/images/shop-login-img.jpg" class="img-fluid" alt="Responsive image"> -->
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input required class="form-control <%= errors.find(e => e.param === 'password') && 'is-invalid' %>"
-                    type="password" name="password" id="password" pattern=".{6,}" value="<%= oldInputs.password %>">
-                <div class="invalid-feedback">
-                    <%= errors.find(e => e.param === 'password') && errors.find(e => e.param === 'password').msg %>
-                </div>
+            <div class="col-11 col-lg-3">
+                <%- include('../includes/error-message.ejs') %>
+                <%- include('../includes/success-message.ejs') %>
+                <form class="form needs-validation" action="/login %>" method="POST" novalidate>
+                    <div class="form-group">
+                        <label for="email">E-Mail</label>
+                        <input required
+                            class="form-control <%= errors.find(e => e.param === 'email') && 'is-invalid' %>"
+                            type="email" name="email" id="email" value="<%= oldInputs.email %>">
+                        <div class="invalid-feedback">
+                            <%= errors.find(e => e.param === 'email') && errors.find(e => e.param === 'email').msg %>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input required
+                            class="form-control <%= errors.find(e => e.param === 'password') && 'is-invalid' %>"
+                            type="password" name="password" id="password" pattern=".{6,}"
+                            value="<%= oldInputs.password %>">
+                        <div class="invalid-feedback">
+                            <%= errors.find(e => e.param === 'password') && errors.find(e => e.param === 'password').msg %>
+                        </div>
+                    </div>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-success" type="submit">Login</button>
+                        <div class="float-right">
+                            No account? <a href="/signup">Signup now :D</a>
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <a href="/reset">Forgot your password? D:</a>
+                    </div>
+                </form>
             </div>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-success" type="submit">Login</button>
-                <div>
-                    No account? <a href="/signup">Signup now :D</a>
-                </div>
-            </div>
-            <div class="float-right">
-                <a href="/reset">Forgot your password? D:</a>
-            </div>
-        </form>
+        </div>
         <% } else { %>
         <h4>You have already logged in!</h4>
         <% } %>
