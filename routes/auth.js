@@ -1,5 +1,6 @@
 const express = require('express');
 const { body } = require('express-validator');
+const bcrypt = require('bcryptjs');
 
 const authController = require('../controllers/auth');
 const User = require('../models/user');
@@ -8,7 +9,21 @@ const Router = express.Router();
 
 Router.get('/login', authController.getLogin);
 
-Router.post('/login', authController.postLogin);
+Router.post(
+  '/login',
+  [
+    body('email')
+      .custom((value, { req }) => {
+        User.findOne({ email: value })
+          .then(user => {
+            if (!user) {
+              return Promise.reject('These are invalid email and password, try again D:');
+            }
+            return true;
+          })
+      })
+  ],
+  authController.postLogin);
 
 Router.post('/logout', authController.postLogout);
 
