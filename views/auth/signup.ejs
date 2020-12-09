@@ -6,27 +6,47 @@
     <%- include('../includes/navigation.ejs') %>
     <main class="w-25 container">
         <% if (!isAuth) { %>
-        <%- include('../includes/error-message.ejs') %>
-        <form class="form" action="/signup %>" method="POST" novalidate>
+        <form class="form needs-validation" action="/signup %>" method="POST" novalidate>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input class="form-control" required type="text" name="username" id="username"
+                <input required
+                    class="form-control <%= errors.find(e => e.param === 'username') && 'is-invalid' %>"
+                    type="text" name="username" id="username" value="<%= oldInputs.username %>"
                     placeholder="Enter your username">
+                <div class="invalid-feedback">
+                    <%= errors.find(e => e.param === 'username') && errors.find(e => e.param === 'username').msg %>
+                </div>
             </div>
             <div class="form-group">
                 <label for="email">E-Mail</label>
-                <input class="form-control" required type="email" name="email" id="email"
-                    placeholder="Enter your signup email">
+                <input required
+                    class="form-control <%= errors.find(e => e.param === 'email') && 'is-invalid' %>"
+                    type="email" name="email" id="email" value="<%= oldInputs.email %>"
+                    placeholder="Enter your email">
+                <div class="invalid-feedback">
+                    <%= errors.find(e => e.param === 'email') && errors.find(e => e.param === 'email').msg %>
+                </div>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input class="form-control" required type="password" name="password" id="password" pattern=".{6,}"
+                <input required
+                    class="form-control <%= errors.find(e => e.param === 'password') && 'is-invalid' %>"
+                    type="password" name="password" id="password" pattern=".{6,}" value="<%= oldInputs.password %>"
                     placeholder="Minimun 6 characters">
+                <div class="invalid-feedback">
+                    <%= errors.find(e => e.param === 'password') && errors.find(e => e.param === 'password').msg %>
+                </div>
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
-                <input class="form-control" required type="password" name="confirmPassword" id="confirmPassword"
-                    pattern=".{6,}">
+                <input required
+                    class="form-control <%= errors.find(e => e.param === 'confirmPassword') && 'is-invalid' %>"
+                    type="password" name="confirmPassword" id="confirmPassword" pattern=".{6,}"
+                    value="<%= oldInputs.confirmPassword %>"
+                    placeholder="Repeat your password">
+                <div class="invalid-feedback">
+                    <%= errors.find(e => e.param === 'confirmPassword') && errors.find(e => e.param === 'confirmPassword').msg %>
+                </div>
             </div>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button class="btn btn-success" type="submit">Signup</button>

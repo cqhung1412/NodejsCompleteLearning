@@ -1,5 +1,5 @@
 const express = require('express');
-const { body } = require('express-validator');
+const { check, body, matchedData } = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 const authController = require('../controllers/auth');
@@ -12,18 +12,13 @@ Router.get('/login', authController.getLogin);
 Router.post(
   '/login',
   [
-    body('email')
-      .custom((value, { req }) => {
-        User.findOne({ email: value })
-          .then(user => {
-            if (!user) {
-              return Promise.reject('These are invalid email and password, try again D:');
-            }
-            return true;
-          })
-      })
+    body('email', 'Please enter a valid email :D')
+      .isEmail(),
+    body('password', 'Please enter a valid password :D')
+      .isLength({ min: 6 })
   ],
-  authController.postLogin);
+  authController.postLogin
+);
 
 Router.post('/logout', authController.postLogout);
 
@@ -32,7 +27,7 @@ Router.get('/signup', authController.getSignup);
 Router.post(
   '/signup',
   [
-    body('username', 'Please enter an username with only text and number (no special character) :D')
+    body('username', 'Please enter an username without special character :D')
       .isAlphanumeric(),
     body('email')
       .isEmail()
