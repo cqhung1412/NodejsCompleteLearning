@@ -13,7 +13,8 @@ Router.post(
   '/login',
   [
     body('email', 'Please enter a valid email :D')
-      .isEmail(),
+      .isEmail()
+      .normalizeEmail(),
     body('password', 'Please enter a valid password :D')
       .isLength({ min: 6 })
   ],
@@ -32,6 +33,7 @@ Router.post(
     body('email')
       .isEmail()
       .withMessage('Please enter a valid email :D')
+      .normalizeEmail()
       .custom((value, { req }) => {
         return User
           .findOne({ email: value })
