@@ -1,3 +1,5 @@
+const { validationResult } = require('express-validator');
+
 const Product = require('../../models/product');
 
 exports.getProducts = (req, res) => {
@@ -18,26 +20,57 @@ exports.getEditProduct = (req, res) => {
             .then(product => {
                 if (!product)
                     return res.sendStatus(404);
+                const { _id, title, imgUrl, price, description } = product;
                 res.render('admin/edit-product', {
                     pageTitle: 'Admin - Edit Product',
                     path: '/admin/edit-product' + productId,
-                    product: product,
-                    editing: isEditing
+                    editing: isEditing,
+                    errors: [],
+                    oldData: {
+                        productId: _id,
+                        title,
+                        imgUrl,
+                        price,
+                        description
+                    }
                 });
             })
             .catch(err => console.log(err));
-    }
-    else {
+    } else {
         res.render('admin/edit-product', {
             pageTitle: 'Admin - Add Product',
             path: '/admin/add-product',
-            editing: false
+            editing: false,
+            errors: [],
+            oldData: {
+                productId: undefined,
+                title: '',
+                imgUrl: '',
+                price: '',
+                description: ''
+            }
         });
     }
 };
 
 exports.postEditProduct = (req, res) => {
     const { productId, title, imgUrl, price, description } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).render('admin/edit-product', {
+            pageTitle: 'Admin - Edit Product',
+            path: '/admin/edit-product' + productId,
+            editing: true,
+            errors: errors.array(),
+            oldData: {
+                productId,
+                title,
+                imgUrl,
+                price,
+                description
+            }
+        });
+    }
     Product.findOneAndUpdate({
         _id: productId,
         userId: req.user._id
@@ -54,6 +87,22 @@ exports.postEditProduct = (req, res) => {
 exports.postAddProduct = (req, res) => {
     const { userId } = req.session;
     const { title, imgUrl, price, description } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).render('admin/edit-product', {
+            pageTitle: 'Admin - Add Product',
+            path: '/admin/add-product',
+            editing: false,
+            errors: errors.array(),
+            oldData: {
+                productId: undefined,
+                title,
+                imgUrl,
+                price,
+                description
+            }
+        });
+    }
     const product = new Product({
         title: title,
         price: price,

@@ -1,6 +1,5 @@
 const express = require('express');
-const { check, body, matchedData } = require('express-validator');
-const bcrypt = require('bcryptjs');
+const { body } = require('express-validator');
 
 const authController = require('../controllers/auth');
 const User = require('../models/user');
