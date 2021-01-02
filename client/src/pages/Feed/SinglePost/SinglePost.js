@@ -19,7 +19,7 @@ class SinglePost extends Component {
         if (res.status !== 200) {
           throw new Error('Failed to fetch status');
         }
-        return res.json();
+        return res.json({ postId });
       })
       .then(resData => {
         this.setState({
