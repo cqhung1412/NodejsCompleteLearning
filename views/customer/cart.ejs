@@ -1,0 +1,38 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+    <main class="container-fluid">
+        <% if (prods.length > 0) { %>
+        <h1>My Cart</h1>
+        <!-- <h3>Total Price: < totalPrice >$</h3> -->
+        <div>
+            <% for (let product of prods) { %>
+            <article class="my-4 p-3 w-75 d-flex flex-row justify-content-between border">
+                <header class="">
+                    <p class=""><%= product.productId.title %> <strong>(<%= product.quantity %>)</strong></p>
+                    <p class="">Unit Price: <%= product.productId.price %>$</p>
+                </header>
+                <div class="d-flex flex-column justify-content-between">
+                    <a href="/products/<%= product.id %>" class="btn btn-info">View Details</a>
+                    <form action="/remove-from-cart" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button class="btn btn-danger">Remove From Cart</button>
+                        <input type="hidden" value="<%= product.productId._id %>" name="productId">
+                    </form>
+                </div>
+            </article>
+            <% } %>
+        </div>
+        <form action="/order" , method="POST" class="">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="btn btn-success" type="submit">Order Now!</button>
+        </form>
+        <% } else { %>
+        <h1>No product currently in your cart</h1>
+        <a href="/products" class="btn btn-primary">Find One Now!</a>
+        <% } %>
+    </main>
+    <%- include('../includes/end.ejs') %>
