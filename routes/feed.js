@@ -1,4 +1,5 @@
 const express = require('express');
+const { body } = require('express-validator');
 
 const feedController = require('../controllers/feed');
 
@@ -8,6 +9,11 @@ const Router = express.Router();
 Router.get('/posts', feedController.getPosts);
 
 // POST /feed/post
-Router.post('/post', feedController.createPost);
+Router.post('/post',
+  [
+    body(['title', 'content']).trim().isLength({ min: 5 }),
+  ],
+  feedController.createPost
+);
 
 module.exports = Router;
