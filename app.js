@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const feedRoutes = require('./routes/feed');
 
@@ -17,4 +18,11 @@ app.use((req, res, next) => {
 
 app.use('/feed', feedRoutes);
 
-app.listen(8080);
+const username = 'cqhung1412';
+const password = 'jaVFccX3gHd47Qh4';
+const dbname = 'media';
+mongoose.connect(
+  `mongodb+srv://${username}:${password}@nodejs-cluster0.pvske.mongodb.net/${dbname}?retryWrites=true&w=majority`
+)
+  .then(result => app.listen(8080))
+  .catch(err => console.log(err));
