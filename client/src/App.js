@@ -35,9 +35,8 @@ class App extends Component {
       return;
     }
     const userId = localStorage.getItem('userId');
-    const remainingMilliseconds =
-      new Date(expiryDate).getTime() - new Date().getTime();
-    this.setState({ isAuth: true, token: token, userId: userId });
+    const remainingMilliseconds = new Date(expiryDate).getTime() - new Date().getTime();
+    this.setState({ isAuth: true, token, userId });
     this.setAutoLogout(remainingMilliseconds);
   }
 
@@ -129,9 +128,7 @@ class App extends Component {
   };
 
   setAutoLogout = milliseconds => {
-    setTimeout(() => {
-      this.logoutHandler();
-    }, milliseconds);
+    setTimeout(() => this.logoutHandler(), milliseconds);
   };
 
   errorHandler = () => {
@@ -139,6 +136,8 @@ class App extends Component {
   };
 
   render() {
+    const { authLoading, isAuth, userId, token, showBackdrop, showMobileNav, error } = this.state;
+
     let routes = (
       <Switch>
         <Route
@@ -148,7 +147,7 @@ class App extends Component {
             <LoginPage
               {...props}
               onLogin={this.loginHandler}
-              loading={this.state.authLoading}
+              loading={authLoading}
             />
           )}
         />
@@ -159,21 +158,22 @@ class App extends Component {
             <SignupPage
               {...props}
               onSignup={this.signupHandler}
-              loading={this.state.authLoading}
+              loading={authLoading}
             />
           )}
         />
         <Redirect to="/" />
       </Switch>
     );
-    if (this.state.isAuth) {
+
+    if (isAuth) {
       routes = (
         <Switch>
           <Route
             path="/"
             exact
             render={props => (
-              <FeedPage userId={this.state.userId} token={this.state.token} />
+              <FeedPage userId={userId} token={token} />
             )}
           />
           <Route
@@ -181,8 +181,8 @@ class App extends Component {
             render={props => (
               <SinglePostPage
                 {...props}
-                userId={this.state.userId}
-                token={this.state.token}
+                userId={userId}
+                token={token}
               />
             )}
           />
@@ -190,29 +190,30 @@ class App extends Component {
         </Switch>
       );
     }
+    
     return (
       <Fragment>
-        {this.state.showBackdrop && (
+        {showBackdrop && (
           <Backdrop onClick={this.backdropClickHandler} />
         )}
-        <ErrorHandler error={this.state.error} onHandle={this.errorHandler} />
+        <ErrorHandler error={error} onHandle={this.errorHandler} />
         <Layout
           header={
             <Toolbar>
               <MainNavigation
                 onOpenMobileNav={this.mobileNavHandler.bind(this, true)}
                 onLogout={this.logoutHandler}
-                isAuth={this.state.isAuth}
+                isAuth={isAuth}
               />
             </Toolbar>
           }
           mobileNav={
             <MobileNavigation
-              open={this.state.showMobileNav}
+              open={showMobileNav}
               mobile
               onChooseItem={this.mobileNavHandler.bind(this, false)}
               onLogout={this.logoutHandler}
-              isAuth={this.state.isAuth}
+              isAuth={isAuth}
             />
           }
         />
