@@ -7,10 +7,20 @@ const { checkStatusCode, createError } = require('../errorHandler');
 const Post = require('../models/post');
 
 exports.getPosts = (req, res) => {
-  Post.find()
+  const currentPage = req.query.page || 1;
+  const perPage = 3;
+  let totalItems;
+  Post.find().countDocuments()
+    .then(count => {
+      totalItems = count;
+      return Post.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
     .then(posts => res.status(200).json({
       message: 'Fetched posts successfully :D',
-      posts
+      posts,
+      totalItems
     }))
     .catch(err => checkStatusCode(err, next));
 };
