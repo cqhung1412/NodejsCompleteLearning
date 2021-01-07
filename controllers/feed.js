@@ -16,12 +16,15 @@ exports.createPost = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty())
     throw createError('Validation failed D:', 422);
+  if (!req.file)
+    throw createError('No image provided D:', 422);
+  
   const { title, content } = req.body;
-  // Create post in db
+  const imgUrl = req.file.path.replace("\\" ,"/");
   const post = new Post({
     title,
     content,
-    imgUrl: 'images/Irene.jpg',
+    imgUrl,
     creator: { name: 'Bear' },
   });
   post.save()
