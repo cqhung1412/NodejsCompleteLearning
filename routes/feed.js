@@ -11,12 +11,23 @@ Router.get('/posts', feedController.getPosts);
 // POST /feed/post
 Router.post('/post',
   [
-    body(['title', 'content']).trim().isLength({ min: 5 }),
+    body(['title', 'content'])
+      .trim()
+      .isLength({ min: 5 }),
   ],
   feedController.createPost
 );
 
 // GET /feed/post/:postId
 Router.get('/post/:postId', feedController.getPost);
+
+Router.put('/post/:postId',
+  [
+    body(['title', 'content'])
+      .trim()
+      .isLength({ min: 5 }),
+  ],
+  feedController.updatePost
+);
 
 module.exports = Router;

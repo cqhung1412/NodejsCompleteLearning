@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const { validationResult } = require('express-validator');
 const { checkStatusCode, createError } = require('../errorHandler');
 
@@ -18,9 +21,9 @@ exports.createPost = (req, res, next) => {
     throw createError('Validation failed D:', 422);
   if (!req.file)
     throw createError('No image provided D:', 422);
-  
+
   const { title, content } = req.body;
-  const imgUrl = req.file.path.replace("\\" ,"/");
+  const imgUrl = req.file.path.replace("\\", "/");
   const post = new Post({
     title,
     content,
@@ -47,4 +50,45 @@ exports.getPost = (req, res, next) => {
       res.status(200).json({ post, message: 'Fetched post successfully :D' });
     })
     .catch(err => checkStatusCode(err, next));
+};
+
+exports.updatePost = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    throw createError('Validation failed D:', 422);
+
+  const { postId } = req.params;
+  const { title, content, image } = req.body;
+  let imgUrl = null;
+  if (req.file) 
+    imgUrl = req.file.path.replace('\\', '/');
+  else
+    imgUrl = image;
+
+  if (!imgUrl)
+    throw createError('No file picked D:', 422);
+
+  Post.findById(postId)
+    .then(post => {
+      if (!post)
+        throw createError('Post not found D:', 404);
+      
+      if (imgUrl !== post.imgUrl)
+        clearImage(post.imgUrl);
+
+      post.title = title;
+      post.content = content;
+      post.imgUrl = imgUrl;
+      return post.save();
+    })
+    .then(result => res.status(200).json({ 
+      message: 'Post updated :D', 
+      post: result 
+    }))
+    .catch(err => checkStatusCode(err, next));
+};
+
+const clearImage = filePath => {
+  filePath = path.join(__dirname, '..', filePath);
+  fs.unlink(filePath, err => console.log(err));
 };
