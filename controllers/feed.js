@@ -5,12 +5,10 @@ const Post = require('../models/post');
 
 exports.getPosts = (req, res) => {
   Post.find()
-    .then(posts => {
-      res.status(200).json({
-        message: 'Fetched posts successfully :D',
-        posts
-      })
-    })
+    .then(posts => res.status(200).json({
+      message: 'Fetched posts successfully :D',
+      posts
+    }))
     .catch(err => checkStatusCode(err, next));
 };
 
@@ -42,7 +40,7 @@ exports.getPost = (req, res, next) => {
   Post.findById(postId)
     .then(post => {
       if (!post)
-        throw createError('Post not found', 404);
+        throw createError('Post not found D:', 404);
       res.status(200).json({ post, message: 'Fetched post successfully :D' });
     })
     .catch(err => checkStatusCode(err, next));

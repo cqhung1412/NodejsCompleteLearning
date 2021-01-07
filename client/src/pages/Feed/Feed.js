@@ -51,7 +51,7 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch(serverUrl + '/feed/posts')
+    fetch(serverUrl + 'feed/posts')
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.');
@@ -107,10 +107,10 @@ class Feed extends Component {
       editLoading: true
     });
     // Set up data (with image!)
-    let url = serverUrl + '/feed/post';
+    let url = serverUrl + 'feed/post';
     let method = 'POST';
     if (this.state.editPost) {
-      url = serverUrl + '/feed/post' + postData._id;
+      url = serverUrl + 'feed/post/' + postData._id;
       method = 'PUT';
     }
 
