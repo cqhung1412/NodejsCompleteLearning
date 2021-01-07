@@ -4,8 +4,9 @@ exports.checkStatusCode = (err, next) => {
   next(err);
 };
 
-exports.createError = (message, statusCode) => {
+exports.createError = (message, statusCode, data = null) => {
   const error = new Error(message);
   error.statusCode = statusCode;
+  error.data = data;
   return error;
 };

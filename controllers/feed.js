@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { validationResult } = require('express-validator');
-const { checkStatusCode, createError } = require('../errorHandler');
+const { checkStatusCode, createError } = require('../util/errorHandler');
 
 const Post = require('../models/post');
 
