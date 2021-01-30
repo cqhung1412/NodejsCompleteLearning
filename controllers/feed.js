@@ -5,6 +5,8 @@ const { validationResult } = require('express-validator');
 const { checkStatusCode, createError } = require('../util/errorHandler');
 
 const Post = require('../models/post');
+const User = require('../models/user');
+const user = require('../models/user');
 
 exports.getPosts = (req, res) => {
   const currentPage = req.query.page || 1;
@@ -32,20 +34,28 @@ exports.createPost = (req, res, next) => {
   if (!req.file)
     throw createError('No image provided D:', 422);
 
+  let creator;
   const { title, content } = req.body;
   const imgUrl = req.file.path.replace("\\", "/");
   const post = new Post({
     title,
     content,
     imgUrl,
-    creator: { name: 'Bear' },
+    creator: req.userId,
   });
   post.save()
+    .then(result => User.findById(req.userId))
+    .then(user => {
+      creator = user;
+      user.posts.push(post);
+      return user.save();
+      
+    })
     .then(result => {
-      console.log(result);
       res.status(201).json({
         message: 'Create post successfully!',
-        post: result
+        post,
+        creator: { _id: creator._id, name: creator.name }
       });
     })
     .catch(err => checkStatusCode(err, next));
