@@ -66,5 +66,13 @@ const dbname = 'media';
 mongoose.connect(
   `mongodb+srv://${username}:${password}@nodejs-cluster0.pvske.mongodb.net/${dbname}?retryWrites=true&w=majority`
 )
-  .then(result => app.listen(8080))
+  .then(result => {
+    const server = app.listen(8080);
+    const io = require('socket.io')(server);
+    io.on('connection', socket => {
+      console.log('client connected to socket.io');
+    });
+  })
   .catch(err => console.log(err));
+
+//
