@@ -6,7 +6,6 @@ const { checkStatusCode, createError } = require('../util/errorHandler');
 
 const Post = require('../models/post');
 const User = require('../models/user');
-const user = require('../models/user');
 
 exports.getPosts = (req, res) => {
   const currentPage = req.query.page || 1;
@@ -67,6 +66,7 @@ exports.getPost = (req, res, next) => {
     .then(post => {
       if (!post)
         throw createError('Post not found D:', 404);
+      
       res.status(200).json({ post, message: 'Fetched post successfully :D' });
     })
     .catch(err => checkStatusCode(err, next));
@@ -93,6 +93,9 @@ exports.updatePost = (req, res, next) => {
       if (!post)
         throw createError('Post not found D:', 404);
       
+      if (post.creator.toString() !== req.userId)
+        throw createError('Not Authorized D:', 403);
+
       if (imgUrl !== post.imgUrl)
         clearImage(post.imgUrl);
 
@@ -115,7 +118,9 @@ exports.deletePost = (req, res, next) => {
       if (!post)
         throw createError('Post not found D:', 404);
       
-      // Check login user
+      if (post.creator.toString() !== req.userId)
+        throw createError('Not Authorized D:', 403);
+
       clearImage(post.imgUrl);
       return Post.findByIdAndRemove(postId);
     })
