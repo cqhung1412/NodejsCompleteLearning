@@ -139,31 +139,3 @@ const clearImage = filePath => {
   filePath = path.join(__dirname, '..', filePath);
   fs.unlink(filePath, err => console.log(err));
 };
-
-exports.getStatus = (req, res, next) => {
-  User.findById(req.userId)
-    .then(user => {
-      if (!user)
-        throw createError('User not found D:', 404);
-
-      res.status(200).json({ status: user.status })
-    })
-    .catch(err => checkStatusCode(err, next));
-};
-
-exports.updateStatus = (req, res, next) => {
-  const { status } = req.body;
-  User.findById(req.userId)
-    .then(user => {
-      if (!user)
-        throw createError('User not found D:', 404);
-
-      if (user._id.toString() !== req.userId)
-        throw createError('Not Authorized D:', 403);
-      
-      user.status = status;
-      return user.save();
-    })
-    .then(result => res.status(200).json({ message: 'Successfully updated status :D' }))
-    .catch(err => checkStatusCode(err, next));
-};
