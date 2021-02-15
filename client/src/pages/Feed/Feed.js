@@ -24,7 +24,7 @@ class Feed extends Component {
   };
 
   componentDidMount() {
-    fetch(serverUrl + 'auth/status', {
+    fetch(serverUrl + '/auth/status', {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }
@@ -43,10 +43,11 @@ class Feed extends Component {
     this.loadPosts();
     const socket = openSocket(serverUrl);
     socket.on('posts', data => {
+      console.log(data);
       if (data.action === 'create') {
-        this.addPost(data.post)
+        this.addPost(data.post);
       }
-    })
+    });
   }
 
   addPost = post => {
@@ -76,7 +77,7 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch(serverUrl + 'feed/posts?page=' + page, {
+    fetch(serverUrl + '/feed/posts?page=' + page, {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }
@@ -105,7 +106,7 @@ class Feed extends Component {
   statusUpdateHandler = event => {
     event.preventDefault();
     console.log(event)
-    fetch(serverUrl + 'auth/status', {
+    fetch(serverUrl + '/auth/status', {
       method: 'PUT',
       headers: {
         Authorization: 'Bearer ' + this.props.token,
@@ -157,10 +158,10 @@ class Feed extends Component {
     formData.append('content', content);
     formData.append('image', image);
 
-    let url = serverUrl + 'feed/post';
+    let url = serverUrl + '/feed/post';
     let method = 'POST';
     if (this.state.editPost) {
-      url = serverUrl + 'feed/post/' + this.state.editPost._id;
+      url = serverUrl + '/feed/post/' + this.state.editPost._id;
       method = 'PUT';
     }
 
@@ -192,8 +193,6 @@ class Feed extends Component {
               p => p._id === prevState.editPost._id
             );
             updatedPosts[postIndex] = post;
-          } else if (prevState.posts.length < 2) {
-            updatedPosts = prevState.posts.concat(post);
           }
           return {
             posts: updatedPosts,
@@ -220,7 +219,7 @@ class Feed extends Component {
 
   deletePostHandler = postId => {
     this.setState({ postsLoading: true });
-    fetch(serverUrl + 'feed/post/' + postId, {
+    fetch(serverUrl + '/feed/post/' + postId, {
       method: 'DELETE',
       headers: {
         Authorization: 'Bearer ' + this.props.token

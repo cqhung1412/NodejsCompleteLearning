@@ -15,7 +15,7 @@ class SinglePost extends Component {
 
   componentDidMount() {
     const postId = this.props.match.params.postId;
-    fetch(serverUrl + 'feed/post/' + postId, {
+    fetch(serverUrl + '/feed/post/' + postId, {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }

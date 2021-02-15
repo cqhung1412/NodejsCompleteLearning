@@ -60,7 +60,7 @@ class App extends Component {
     event.preventDefault();
     const { email, password } = authData;
     this.setState({ authLoading: true });
-    fetch(serverUrl + 'auth/login', {
+    fetch(serverUrl + '/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -111,7 +111,7 @@ class App extends Component {
     event.preventDefault();
     this.setState({ authLoading: true });
     const { email, password, name } = authData.signupForm;
-    fetch(serverUrl + 'auth/signup', {
+    fetch(serverUrl + '/auth/signup', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
