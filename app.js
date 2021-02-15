@@ -42,10 +42,7 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Methods',
     'OPTIONS, GET, POST, PUT, PATCH, DELETE'
   );
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization'
-  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
@@ -64,13 +61,18 @@ const username = 'cqhung1412';
 const password = 'jaVFccX3gHd47Qh4';
 const dbname = 'media';
 mongoose.connect(
-  `mongodb+srv://${username}:${password}@nodejs-cluster0.pvske.mongodb.net/${dbname}?retryWrites=true&w=majority`
+  `mongodb+srv://${username}:${password}@nodejs-cluster0.pvske.mongodb.net/${dbname}?retryWrites=true&w=majority`,
+  {
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useNewUrlParser: true
+  }
 )
   .then(result => {
     const server = app.listen(8080);
-    const io = require('socket.io')(server);
+    const io = require('./socket').init(server);
     io.on('connection', socket => {
-      console.log('client connected to socket.io');
+      console.log('Client connected');
     });
   })
   .catch(err => console.log(err));

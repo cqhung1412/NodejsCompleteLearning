@@ -41,7 +41,26 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
-    openSocket(serverUrl);
+    const socket = openSocket(serverUrl);
+    socket.on('posts', data => {
+      if (data.action === 'create') {
+        this.addPost(data.post)
+      }
+    })
+  }
+
+  addPost = post => {
+    this.setState(prevState => {
+      const updatedPosts = [...prevState.posts];
+      if (prevState.postPage === 1) {
+        updatedPosts.pop();
+        updatedPosts.unshift(post);
+      }
+      return {
+        posts: updatedPosts,
+        totalPosts: prevState.totalPosts + 1
+      };
+    });
   }
 
   loadPosts = direction => {
