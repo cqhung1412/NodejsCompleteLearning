@@ -94,11 +94,11 @@ exports.updatePost = async (req, res, next) => {
     throw createError('No file picked D:', 422);
 
   try {
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('creator');
     if (!post)
       throw createError('Post not found D:', 404);
 
-    if (post.creator.toString() !== req.userId)
+    if (post.creator._id.toString() !== req.userId)
       throw createError('Not Authorized D:', 403);
 
     if (imgUrl !== post.imgUrl)
@@ -108,7 +108,12 @@ exports.updatePost = async (req, res, next) => {
     post.content = content;
     post.imgUrl = imgUrl;
 
-    await post.save();
+    const result = await post.save();
+
+    io.getIO().emit('posts', {
+      action: 'update',
+      post: result
+    });
     res.status(200).json({
       message: 'Post updated :D',
       post
