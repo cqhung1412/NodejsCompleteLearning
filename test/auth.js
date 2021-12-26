@@ -1,4 +1,5 @@
 const { expect } = require('chai');
+const jsonwebtoken = require('jsonwebtoken');
 const { it, describe } = require('mocha');
 const authMiddleware = require('../util/is-auth');
 
@@ -13,6 +14,20 @@ describe('Auth Middleware', function () {
     const req = { get: headerName => 'headerData' };
     expect(authMiddleware.bind(this, req, {}, () => { }))
       .to.throw();
+  });
+
+  it('Should throw an error if the token cannot be verified', function () {
+    const req = { get: headerName => 'Bearer token' };
+    expect(authMiddleware.bind(this, req, {}, () => { }))
+      .to.throw('jwt malformed');
+  });
+
+  it('Should yield a userId after decoding the token', async function () {
+    const token = jsonwebtoken.sign({ userId: 'someUserId' }, 'asecretprivatekey');
+    const req = { get: headerName => `Bearer ${token}` };
+    authMiddleware(req, {}, () => { });
+    expect(req)
+      .to.have.property('userId');
   });
 });
 
