@@ -57,11 +57,12 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message, data });
 });
 
-const username = 'cqhung1412';
-const password = 'jaVFccX3gHd47Qh4';
-const dbname = 'media';
+const username = 'presenceadmin';
+const password = 'wf95bIpJ18dZzCPA';
+const cluster = 'presence-cluster0.hhz9u';
+const dbname = 'attendance';
 mongoose.connect(
-  `mongodb+srv://${username}:${password}@nodejs-cluster0.pvske.mongodb.net/${dbname}?retryWrites=true&w=majority`,
+  `mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${dbname}?retryWrites=true&w=majority`,
   {
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -70,6 +71,7 @@ mongoose.connect(
 )
   .then(result => {
     const server = app.listen(8080);
+    console.log('Server listening on port 8080');
     const io = require('./socket').init(server);
     io.on('connection', socket => {
       console.log('Client connected');
