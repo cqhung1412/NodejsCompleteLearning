@@ -29,26 +29,26 @@ exports.getPosts = async (req, res) => {
 };
 
 exports.createPost = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty())
-    throw createError('Validation failed D:', 422);
-  if (!req.file)
-    throw createError('No image provided D:', 422);
-
-  const { title, content } = req.body;
-  const imgUrl = req.file.path.replace("\\", "/");
-  const post = new Post({
-    title,
-    content,
-    imgUrl,
-    creator: req.userId,
-  });
-
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      throw createError('Validation failed D:', 422);
+    if (!req.file)
+      throw createError('No image provided D:', 422);
+
+    const { title, content } = req.body;
+    const imgUrl = req.file.path.replace("\\", "/");
+    const post = new Post({
+      title,
+      content,
+      imgUrl,
+      creator: req.userId,
+    });
+
     await post.save();
     const creator = await User.findById(req.userId);
     creator.posts.push(post);
-    await creator.save();
+    const savedUser = await creator.save();
     io.getIO().emit('posts', {
       action: 'create',
       post: {
@@ -61,8 +61,10 @@ exports.createPost = async (req, res, next) => {
       post,
       creator: { _id: creator._id, name: creator.name }
     });
+    return savedUser;
   } catch (error) {
     checkStatusCode(error, next);
+    return {};
   }
 };
 
