@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken');
 const { expect } = require('chai');
 const { it, describe } = require('mocha');
-const authMiddleware = require('../util/is-auth');
-const Sinon = require('sinon');
+const sinon = require('sinon');
 
-describe('Auth Middleware', function () {
+const authMiddleware = require('../util/is-auth');
+
+describe('Auth Util', function () {
   it('Should throw an error if there is no authorization header is present', function () {
     const req = { get: headerName => null };
     expect(authMiddleware.bind(this, req, {}, () => { }))
@@ -22,7 +23,7 @@ describe('Auth Middleware', function () {
     // const req = { get: headerName => `Bearer ${token}` };
     // jwt.verify = () => ({ userId: 'someUserId' });
     const req = { get: headerName => `Bearer dasdadaasasdasdsawqe` };
-    Sinon.stub(jwt, 'verify');
+    sinon.stub(jwt, 'verify');
     jwt.verify.returns({ userId: 'someUserId' });
     authMiddleware(req, {}, () => { });
     expect(req)

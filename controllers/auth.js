@@ -33,13 +33,13 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty())
-    throw createError('Validation failed D:', 422, errors.array());
-
-  const { email, password } = req.body;
-
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      throw createError('Validation failed D:', 422, errors.array());
+
+    const { email, password } = req.body;
+
     const user = await User.findOne({ email });
     if (!user)
       throw createError('User not found D:', 401); // 401: not authenticated
@@ -59,8 +59,10 @@ exports.login = async (req, res, next) => {
       token,
       userId: user._id.toString()
     });
+    return;
   } catch (error) {
     checkStatusCode(error, next);
+    return error;
   }
 };
 
