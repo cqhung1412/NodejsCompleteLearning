@@ -64,7 +64,7 @@ exports.createPost = async (req, res, next) => {
     return savedUser;
   } catch (error) {
     checkStatusCode(error, next);
-    return {};
+    return error;
   }
 };
 

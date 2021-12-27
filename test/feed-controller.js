@@ -21,6 +21,7 @@ describe('Feed Controller', function () {
       useFindAndModify: false,
       useNewUrlParser: true
     })
+      .then(() => Post.deleteMany({}))
       .then(result => {
         const user = new User({
           email: 'test@test.com',
@@ -49,8 +50,8 @@ describe('Feed Controller', function () {
     };
 
     const res = {
-      status: () => this,
-      json: () => { }
+      status: function () { return this; },
+      json: function () { }
     };
 
     const stub = sinon.stub(io, 'getIO').callsFake(() => {
@@ -69,6 +70,7 @@ describe('Feed Controller', function () {
 
   after(function (done) {
     User.deleteMany({})
+      .then(() => Post.deleteMany({}))
       .then(() => mongoose.disconnect())
       .then(() => done());
   });
